@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Downloads all currently available tripleA map zip files to the current directory
+
+curl --silent https://raw.githubusercontent.com/triplea-maps/Project/master/production_config/triplea_maps.yaml | grep url | sed 's/^\s*url: //' | xargs wget"
+
