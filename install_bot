@@ -1,0 +1,36 @@
+#!/bin/bash
+
+BOT_VERSION=$1
+DESTINATION_FOLDER=$2
+
+set -eu
+
+
+function usage() {
+  echo "usage: $(basename $0) [bot_version] [destination_folder]"
+  echo " bot_zip_url: download location for the bot zip install folder"
+  echo " destination_folder: where to install the bot"
+  exit -1
+}
+
+if [[ -z "$BOT_VERSION" || -z "$DESTINATION_FOLDER" ]]; then
+  usage;
+fi
+
+DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$BOT_VERSION/triplea-$BOT_VERSION-bots.zip"
+echo "Download from $DOWNLOAD_URL"
+wget $DOWNLOAD_URL
+
+
+FILE=$(ls | grep "$BOT_VERSION-bots.zip$")
+
+TARGET_FOLDER=$DESTINATION_FOLDER/bot_$BOT_VERSION
+mkdir -p $TARGET_FOLDER
+echo "Unpacking $FILE to: $TARGET_FOLDER" 
+
+unzip $FILE -d $TARGET_FOLDER
+rm $FILE
+
+# copy the run_bot script, should be in same same folder as this script
+cp run_bot $TARGET_FOLDER
+
