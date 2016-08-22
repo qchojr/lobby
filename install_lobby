@@ -1,0 +1,38 @@
+#!/bin/bash
+
+LOBBY_VERSION=$1
+DESTINATION_FOLDER=$2
+
+set -eu
+
+
+function usage() {
+  echo "usage: $(basename $0) [bot_version] [destination_folder]"
+  echo " lobby_zip_url: download location for the lobby zip install folder"
+  echo " destination_folder: where to install the lobby"
+  exit -1
+}
+
+if [[ -z "$LOBBY_VERSION" || -z "$DESTINATION_FOLDER" ]]; then
+  usage;
+fi
+
+DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$BOT_VERSION/triplea-$BOT_VERSION-server.zip"
+echo "Download from $DOWNLOAD_URL"
+wget $DOWNLOAD_URL
+
+
+FILE=$(ls | grep "$BOT_VERSION-bots.zip$")
+
+TARGET_FOLDER=$DESTINATION_FOLDER/lobby_$BOT_VERSION
+sudo mkdir -p $TARGET_FOLDER
+echo "Unpacking $FILE to: $TARGET_FOLDER" 
+
+sudo unzip $FILE -d $TARGET_FOLDER
+rm $FILE
+
+
+# copy the run_bot script, should be in same same folder as this script
+sudo cp run_lobby $TARGET_FOLDER
+
+sudo chown -R triplea:triplea $TARGET_FOLDER
