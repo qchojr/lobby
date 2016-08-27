@@ -8,7 +8,7 @@ set -eu
 
 function usage() {
   echo "usage: $(basename $0) [bot_version] [destination_folder]"
-  echo "example: nohup sudo -u triplea ./$(basename $0) 1.9.0.0.2668 /home/triplea/bots_1_9"
+  echo "example: sudo -u triplea ./$(basename $0) 1.9.0.0.2668 /home/triplea/bots_1_9"
   echo " bot_zip_url: download location for the bot zip install folder"
   echo " destination_folder: where to install the bot"
   exit -1
@@ -18,7 +18,7 @@ if [[ -z "$BOT_VERSION" || -z "$DESTINATION_FOLDER" ]]; then
   usage;
 fi
 
-DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$BOT_VERSION/triplea-$BOT_VERSION-all_platform.zip"
+DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$BOT_VERSION/triplea-$BOT_VERSION-all_platforms.zip"
 echo "Download from $DOWNLOAD_URL"
 wget $DOWNLOAD_URL
 
