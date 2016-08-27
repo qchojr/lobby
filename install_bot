@@ -8,7 +8,7 @@ set -eu
 
 function usage() {
   echo "usage: $(basename $0) [bot_version] [destination_folder]"
-  echo "example: nohup sudo -u triplea ./$(basenaem $0) 1.9.0.0.2668 /home/triplea/bots_1_9"
+  echo "example: nohup sudo -u triplea ./$(basename $0) 1.9.0.0.2668 /home/triplea/bots_1_9"
   echo " bot_zip_url: download location for the bot zip install folder"
   echo " destination_folder: where to install the bot"
   exit -1
