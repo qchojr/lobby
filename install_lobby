@@ -25,14 +25,15 @@ wget $DOWNLOAD_URL
 FILE=$(ls | grep "$LOBBY_VERSION-lobbys.zip$")
 
 TARGET_FOLDER=$DESTINATION_FOLDER/lobby_$LOBBY_VERSION
-sudo mkdir -p $TARGET_FOLDER
+mkdir -p $TARGET_FOLDER
 echo "Unpacking $FILE to: $TARGET_FOLDER" 
 
-sudo unzip $FILE -d $TARGET_FOLDER
+unzip $FILE -d $TARGET_FOLDER
 rm $FILE
 
 
 # copy the run_lobby script, should be in same same folder as this script
-sudo cp run_lobby $TARGET_FOLDER
+cp run_lobby $TARGET_FOLDER
 
-sudo chown -R triplea:triplea $TARGET_FOLDER
+## assume we're running as triplea
+#sudo chown -R triplea:triplea $TARGET_FOLDER

@@ -8,7 +8,7 @@ set -eu
 
 function usage() {
   echo "usage: $(basename $0) [bot_version] [destination_folder]"
-  echo "example: sudo ./$(basename $0) 1.9.0.0.2668 /home/triplea/bots_1_9"
+  echo "example: ./$(basename $0) 1.9.0.0.2668 /home/triplea/bots_1_9"
   echo " bot_zip_url: download location for the bot zip install folder"
   echo " destination_folder: where to install the bot"
   exit -1
@@ -28,14 +28,13 @@ wget $DOWNLOAD_URL
 FILE=$(ls | grep "$BOT_VERSION-$FILE_SUFFIX$")
 
 TARGET_FOLDER=$DESTINATION_FOLDER/bot_$BOT_VERSION
-sudo mkdir -p $TARGET_FOLDER
+mkdir -p $TARGET_FOLDER
 echo "Unpacking $FILE to: $TARGET_FOLDER" 
 
-sudo unzip $FILE -d $TARGET_FOLDER
+unzip $FILE -d $TARGET_FOLDER
 rm $FILE
 
 
 # copy the run_bot script, should be in same same folder as this script
-sudo cp run_bot $TARGET_FOLDER
+cp run_bot $TARGET_FOLDER
 
-sudo chown -R triplea:triplea $TARGET_FOLDER
