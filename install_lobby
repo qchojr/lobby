@@ -22,13 +22,13 @@ echo "Download from $DOWNLOAD_URL"
 wget $DOWNLOAD_URL
 
 
-FILE=$(ls | grep "$LOBBY_VERSION-lobbys.zip$")
+FILE=$(ls | grep "$LOBBY_VERSION-server.zip$")
 
 TARGET_FOLDER=$DESTINATION_FOLDER/lobby_$LOBBY_VERSION
 mkdir -p $TARGET_FOLDER
 echo "Unpacking $FILE to: $TARGET_FOLDER" 
 
-unzip $FILE -d $TARGET_FOLDER
+unzip -D $TARGET_FOLDER $FILE
 rm $FILE
 
 
