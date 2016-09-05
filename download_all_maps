@@ -2,5 +2,5 @@
 
 # Downloads all currently available tripleA map zip files to the current directory
 
-curl --silent https://raw.githubusercontent.com/triplea-game/triplea/triplea_maps.yaml | grep url | sed 's/^-*\s*url: //' | grep "^https" | xargs wget
+curl --silent https://raw.githubusercontent.com/triplea-game/triplea/master/triplea_maps.yaml | grep url | sed 's/^-*\s*url: //' | grep "^https" | xargs wget
 
