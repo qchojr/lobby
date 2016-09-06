@@ -4,7 +4,7 @@
 
 for i in $(curl --silent https://raw.githubusercontent.com/triplea-game/triplea/master/triplea_maps.yaml | grep url | sed 's/^-*\s*url: //' | grep "^https"); do
  MAP_NAME=$(echo $i | sed 's|/archive.*||' | sed 's|.*/||')
- wget $i -o $MAP_NAME-master.zip; 
- echo "Done downloading - $MAP_NAME"
+ wget $i
+ mv -v master.zip $MAP_NAME-master.zip
 done;
 
