@@ -1,0 +1,1 @@
+sudo -u triplea nohup ./run_bot 400  &
