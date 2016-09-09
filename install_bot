@@ -37,4 +37,5 @@ rm $FILE
 
 # copy the run_bot script, should be in same same folder as this script
 cp run_bot $TARGET_FOLDER
+cp run_bot_number $TARGET_FOLDER
 
