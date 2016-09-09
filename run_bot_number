@@ -1,1 +1,8 @@
-sudo -u triplea nohup ./run_bot 400  &
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  echo "Usage: $(basename $0) (bot number)"
+  exit
+fi
+
+sudo -u triplea nohup ./run_bot 400$1 $1  &
