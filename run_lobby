@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd $(dirname $0)
 java -server  -Xmx256m -classpath bin/triplea.jar:lib/derby-10.10.1.1.jar -Dtriplea.lobby.port=3304 games.strategy.engine.lobby.server.LobbyServer
 
