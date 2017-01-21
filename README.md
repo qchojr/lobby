@@ -1,42 +1,28 @@
 # lobby
-- Things relating to the tripleA lobby
-- Contains any scripts that are used on the server
-
-## Deploying
-- Likely to be an HTTPS git clone, ideally per user, but perhaps under the shared account
- 
-## Run Warclub Bots
-To set up a bot:
-- log into the server, (2961 is an example version, that may be changed) and run:
-
-```
-git clone https://github.com/triplea-game/lobby.git
-cd lobby
-./install_bot 2961 ~/bots_1_9/
-```
-
-That will then install the bot distribution to the `~/bots_1_9/` folder, and a run script. Now change user and launch the bot:
-```
-cd /home/triplea
-su triplea
-### type in triplea user password
-cd /home/triplea/bots_1_9/bot_1.9.0.0.2961/
-```
-
-If not running on teh warclub server, edit the run_bot file and update the bot name (update it in both places..), otherwise now run:
-```
-nohup ./run_bot 4001 1 &
-```
-
-4001 is the port to run on, ensure that port has been opened in firewall with:
-```
-sudo ufw allow 4001
-```
+- Script repo for lobby and bot setup
 
 ## Run Hosted Bots
 Anyone who has the ability to host a game in the tripleA 1.9 Lobby can also host one or more bot's in the lobby for others to use. Here is how.
 
-### Windows
+
+## Linux Bot install
+
+Insructions below assume you are root on a very brand new linode machine (Ubuntu 16.04):
+```
+sudo apt-get install -y git
+git clone https://github.com/triplea-game/lobby.git
+cd lobby
+
+./setup_server <new_user_name>
+./install_all <latest_version_number, eg: 1.9.0.0.5500>
+```
+The above will create a `triplea` user account, and another one of your choosing.
+Install all will download maps and bot binary files. It will then move it all
+to `/home/triplea/bots/`
+
+
+### Hosting Bots on Windows
+
 Create this text file on your computer for each bot you want to create and save it with the extension .bat
 For each bot batch file you create, change the SET PORT= and SET BOT_NUMBER= to a new port number and name. This file must be saved to the triplea game folder on your pc.
 
@@ -55,16 +41,6 @@ java -server -Xmx320m -Djava.awt.headless=true -classpath bin/triplea.jar games.
 
 pause
 ```
-
-### Mac + Linux
-
-Script to launch bot host is at: https://github.com/triplea-game/lobby/blob/master/run_bot
-First `cd` to the TripleA install directory.
-
-Clone this repo (https://github.com/triplea-game/lobby) or wget the above script:
-`wget https://raw.githubusercontent.com/triplea-game/lobby/master/run_bot`
-
-Update the run_bot script as appropriate. Take care to note where the map folder is, and update that parameter in the script file. 
 
 ### Bot Maintenance
 
