@@ -1,8 +1,18 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
+
+## Bot number to be assigned to the current bot.
+## This updated both the port number the bot runs on,
+## and the name of the bot.
+BOT_NUMBER=$1
+
+set -eu 
+
+PORT="400$BOT_NUMBER"
+
+if [ -z "$BOT_NUMBER" ]; then
   echo "Usage: $(basename $0) (bot number)"
   exit
 fi
 
-sudo -u triplea nohup ./run_bot 400$1 $1  &
+sudo -u triplea nohup ./run_bot $PORT $BOT_NUMBER &
