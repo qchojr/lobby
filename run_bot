@@ -22,7 +22,7 @@ if [[ -z "$PORT" ]] || [[ -z "$BOT_NUMBER" ]]; then
 fi
 
 mkdir -p logs
-$LOG_FILE=logs/bot_$BOT_NUMBER.log
+LOG_FILE=logs/bot_$BOT_NUMBER.log
 
 cd $(dirname $0)
-java -server -Xmx320m -Djava.awt.headless=true -classpath bin/triplea.jar games.strategy.engine.framework.headlessGameServer.HeadlessGameServer triplea.game.host.console=false triplea.game= triplea.server=true triplea.port=$PORT triplea.lobby.host=$LOBBY_HOST triplea.lobby.port=$LOBBY_PORT triplea.name=Bot${BOT_NUMBER}_WarClub triplea.lobby.game.hostedBy=Bot${BOT_NUMBER}_WarClub triplea.lobby.game.supportEmail=Nobody@hotmail123.com triplea.lobby.game.comments="automated_host" triplea.lobby.game.reconnection=172800 mapFolder=../maps &> LOG_FILE
+java -server -Xmx320m -Djava.awt.headless=true -classpath bin/triplea.jar games.strategy.engine.framework.headlessGameServer.HeadlessGameServer triplea.game.host.console=false triplea.game= triplea.server=true triplea.port=$PORT triplea.lobby.host=$LOBBY_HOST triplea.lobby.port=$LOBBY_PORT triplea.name=Bot${BOT_NUMBER}_WarClub triplea.lobby.game.hostedBy=Bot${BOT_NUMBER}_WarClub triplea.lobby.game.supportEmail=Nobody@hotmail123.com triplea.lobby.game.comments="automated_host" triplea.lobby.game.reconnection=172800 mapFolder=../maps &> $LOG_FILE
