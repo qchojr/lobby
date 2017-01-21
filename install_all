@@ -20,5 +20,5 @@ vim bots/*/run_bot
 
 ## mv installed files to triplea user home folder 
 sudo mv bots/ /home/triplea/
-sudo chown -R triplea:triplea /home/triplea/bots/
+sudo chown -R triplea:triplea /home/triplea/
 
