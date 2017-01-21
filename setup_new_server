@@ -20,7 +20,7 @@ echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /
 
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
 sudo apt-get update
-sudo apt-get install oracle-java8-installer ufw git htop iftop \
+sudo apt-get install -y oracle-java8-installer ufw git htop iftop \
    fail2ban unattended-upgrades unzip default-jre vim
 
 ufw allow 22
