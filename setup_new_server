@@ -55,7 +55,7 @@ echo "Otherwise now install maps and bot"
 
 
 echo "install yourself as an admin"
-echo "$NEW_USER            ALL = (ALL) NOPASSWD: ALL"
+echo "$NEW_USER            ALL = (ALL) NOPASSWD:ALL"
 read
 visudo
 service ssh restart
