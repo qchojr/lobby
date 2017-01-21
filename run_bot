@@ -10,7 +10,7 @@ BOT_NUMBER=$2
 set -eu
 
 BOT_NAME=NJ_WarClub
-FULL_NAME="Bot${BOT_NUMBER}_${BOT_NAME}" ## must start with "Bot"
+BOT_FULL_NAME="Bot${BOT_NUMBER}_${BOT_NAME}" ## must start with "Bot"
 COMMENT="automated_host ${BOT_NUMBER}" ## must contain "automated_host"
 
 PATH_TO_MAPS_FOLDER="../maps"
