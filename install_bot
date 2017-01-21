@@ -34,8 +34,9 @@ echo "Unpacking $FILE to: $TARGET_FOLDER"
 unzip -d $TARGET_FOLDER $FILE
 rm $FILE
 
+# copy scripts
+SCRIPT_HOME=($(cd $(dirname $0) && pwd))
+cp "$SCRIPT_HOME/run_bot" "$TARGET_FOLDER"
+cp "$SCRIPT_HOME/run_bot_number" "$TARGET_FOLDER"
 
-# copy the run_bot script, should be in same same folder as this script
-cp run_bot $TARGET_FOLDER
-cp run_bot_number $TARGET_FOLDER
-
+echo "Install complete. Now verify/update the 'run' scripts in $TARGET_FOLDER" 
