@@ -59,3 +59,8 @@ echo "$NEW_USER            ALL = (ALL) NOPASSWD:ALL"
 read
 visudo
 service ssh restart
+
+
+echo "Okay, now check that you have passwordless login to this server, and sudo"
+echo "Once good, next step is to run 'install_all'"
+echo "Congrats, server setup is complete"
