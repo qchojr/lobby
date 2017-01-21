@@ -1,0 +1,49 @@
+#!/bin/bash
+
+NEW_USER=$1
+
+set -eu
+if [ -z "$NEW_USER" ]; then
+ echo "usage: $(basename $0) [new_user_name]"
+ echo " new_user_name: name of the very first user to create."
+ exit 1
+fi
+
+echo "We assume you are running as root and are on a brand new server."
+sudo echo "yes";
+
+
+## install java (ref: http://tecadmin.net/install-java-8-on-debian/#)
+
+echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" > /etc/apt/sources.list.d/java-8-debian.list
+echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list.d/java-8-debian.list
+
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+sudo apt-get update
+sudo apt-get install oracle-java8-installer ufw git htop iftop fail2ban unattended-upgrades unzip default-jre
+
+ufw allow 22
+ufw enable 
+
+useradd $NEW_USER
+passwd -l danv
+
+mkdir /home/$NEW_USER/.ssh/
+chmod 700 /home/$NEW_USER/.ssh
+
+touch /home/$NEW_USER/.ssh/authorized_keys
+chmod 400 /home/$NEW_USER/.ssh/authorized_keys
+   
+echo "sudo vi /home/danv/.ssh/authorized_keys"
+
+chown $NEW_USER:$NEW_USER /home/danv -R
+
+visudo
+ 
+# security ref: https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers
+echo "Turning off password login, make sure you get at leaset one user up and going with ssh keys"
+sed -i 's/^PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+sed -i 's/^PasswordAuthentication.*/PasswordAuthenitcation no/' /etc/ssh/sshd_config
+
+service ssh restart
+
