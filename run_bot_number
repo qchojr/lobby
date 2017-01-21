@@ -15,4 +15,6 @@ if [ -z "$BOT_NUMBER" ]; then
   exit
 fi
 
+sudo ufw allow $PORT
+sudo ufw reload
 sudo -u triplea nohup ./run_bot $PORT $BOT_NUMBER &
