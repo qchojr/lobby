@@ -2,7 +2,7 @@
 
 NEW_USER=$1
 
-set -eu
+set -u
 if [ -z "$NEW_USER" ]; then
  echo "usage: $(basename $0) [new_user_name]"
  echo " new_user_name: name of the very first user to create."
@@ -20,15 +20,23 @@ echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /
 
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
 sudo apt-get update
-sudo apt-get install oracle-java8-installer ufw git htop iftop fail2ban unattended-upgrades unzip default-jre
+sudo apt-get install oracle-java8-installer ufw git htop iftop \
+   fail2ban unattended-upgrades unzip default-jre vim
 
 ufw allow 22
 ufw enable 
 
+ ## add triplea user
+useradd triplea
+passwd -l triplea
+mkdir -p /home/triplea
+chown -R tripea:triplea /home/triplea
+
+
+ ## add first admin user
 useradd $NEW_USER
 passwd -l $NEW_USER
-
-mkdir /home/$NEW_USER/.ssh/
+mkdir -p /home/$NEW_USER/.ssh/
 chmod 700 /home/$NEW_USER/.ssh
 
 touch /home/$NEW_USER/.ssh/authorized_keys
@@ -42,6 +50,12 @@ sed -i 's/^PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
 sed -i 's/^PasswordAuthentication.*/PasswordAuthenitcation no/' /etc/ssh/sshd_config
 
 vi /home/$NEW_USER/.ssh/authorized_keys
+echo "Turned off password login, make sure you can passwordless SSH to this server before logging off."
+echo "Otherwise now install maps and bot"
+
+
+echo "install yourself as an admin"
+echo "$NEW_USER            ALL = (ALL) NOPASSWD: ALL"
+read
 visudo
 service ssh restart
-echo "Turned off password login, make sure you get at leaset one user up and going with ssh keys"
