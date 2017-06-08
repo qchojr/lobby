@@ -13,21 +13,19 @@ sudo apt-get install -y git
 git clone https://github.com/triplea-game/lobby.git
 cd lobby
 
-./setup_new_server <new_user_name>
-./install_all <latest_version_number, eg: 1.9.0.0.5500>
-cd /home/triplea/bots/bot_<latest_version_number>
+./setup
+./install_all <latest_version_number, eg: 1.9.0.0.5500> #Leave blank for latest version
 
-# next, edit run_bot and make sure settings look
-vi run_bot 
-
-./run_bot_number 01
-./run_bot_number 02
-./run_bot_number 03
+sudo service triplea-bot@0 start
+sudo service triplea-bot@1 start
+sudo service triplea-bot@2 start
 ```
 
 The above will create a `triplea` user account, and another one of your choosing.
 Install all will download maps and bot binary files. It will then move it all
 to `/home/triplea/bots/`
+
+If you want to remove the lobby and the bots later, run uninstall_lobby and uninstall_bot in their respective installation folders with sudo
 
 
 ### Hosting Bots on Windows
@@ -54,4 +52,3 @@ pause
 ### Bot Maintenance
 
 Maps need to be updated periodically to stay with the latest. The following script is meant to help and will download all maps: https://github.com/triplea-game/lobby/blob/master/download_all_maps  (future work: add configuration here for how to set this script up in a cronjob, and then copy-in and replace the old maps automatically)
-

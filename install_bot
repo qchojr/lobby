@@ -1,42 +1,55 @@
 #!/bin/bash
 
-BOT_VERSION=$1
-DESTINATION_FOLDER=$2
+if [[ $* == *--help* ||  $* == *-h* ]]; then
+  echo "Usage: $0 [bot_version] [destination_folder]"
+  echo "Example: $0 1.9.0.0.2668 /home/triplea/bots"
+  echo "bot_version: Bot version which should be installed. Use 'latest' or leave blank to install the newest version."
+  echo "destination_folder: Bot installation location. Defaults to /home/triplea/bots"
+  exit 0
+fi
+
+cd $(dirname $0)
+
+BOT_VERSION=${1:-'latest'}
+DESTINATION_FOLDER=${2:-'/home/triplea/bots'}
 
 set -eu
 
-
-function usage() {
-  echo "usage: $(basename $0) [bot_version] [destination_folder]"
-  echo "example: ./$(basename $0) 1.9.0.0.2668 /home/triplea/bots_1_9"
-  echo " bot_zip_url: download location for the bot zip install folder"
-  echo " destination_folder: where to install the bot"
-  exit -1
-}
-
-if [[ -z "$BOT_VERSION" || -z "$DESTINATION_FOLDER" ]]; then
-  usage;
+#Retrieve latest triplea version
+if [[ "$BOT_VERSION" == "latest" ]]; then
+  BOT_VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' | python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])")
 fi
 
+VERSION_FILE="$DESTINATION_FOLDER/version"
+if [[ ! ($* == *--force* || $* == *-f*) && -f "$VERSION_FILE" && "$BOT_VERSION" == "$(<$VERSION_FILE)" ]]; then
+  echo "Version $BOT_VERSION is already installed"
+  echo "Run with -f or --force to force the installation"
+  exit 0
+fi
 
 FILE_SUFFIX="all_platforms.zip"
 DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$BOT_VERSION/triplea-$BOT_VERSION-$FILE_SUFFIX"
 echo "Download from $DOWNLOAD_URL"
 wget $DOWNLOAD_URL
 
-
 FILE=$(ls | grep "$BOT_VERSION-$FILE_SUFFIX$")
 
-TARGET_FOLDER=$DESTINATION_FOLDER/bot_$BOT_VERSION
-mkdir -p $TARGET_FOLDER
-echo "Unpacking $FILE to: $TARGET_FOLDER" 
+mkdir -p $DESTINATION_FOLDER
+echo "$BOT_VERSION" > $DESTINATION_FOLDER/version
 
-unzip -d $TARGET_FOLDER $FILE
+echo "Unpacking $FILE to: $DESTINATION_FOLDER"
+unzip -d $DESTINATION_FOLDER $FILE -o
 rm $FILE
 
 # copy scripts
 SCRIPT_HOME=($(cd $(dirname $0) && pwd))
-cp "$SCRIPT_HOME/run_bot" "$TARGET_FOLDER"
-cp "$SCRIPT_HOME/run_bot_number" "$TARGET_FOLDER"
+cp "$SCRIPT_HOME/run_bot" "$DESTINATION_FOLDER"
+cp "$SCRIPT_HOME/uninstall_bot" "$DESTINATION_FOLDER"
 
-echo "Install complete. Now verify/update the 'run' scripts in $TARGET_FOLDER" 
+sed "s|BOT_DIR|$DESTINATION_FOLDER|" "./triplea-bot@.service" > "./triplea-bot@.service.custom"
+sudo mv "./triplea-bot@.service.custom" "/lib/systemd/system/triplea-bot@.service"
+sudo systemctl daemon-reload
+
+sudo chown -R triplea:triplea $DESTINATION_FOLDER
+
+echo "You can start bots by typing 'sudo service triplea-bot@BOT_NUMBER start' or 'sudo systemctl start triplea-bot@BOT_NUMBER'"

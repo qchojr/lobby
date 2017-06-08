@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [[ $USER != "root" ]]; then
+  echo "This script must be run as root"
+  echo "Type 'sudo $0'"
+  exit 1
+fi
+
+apt install openjdk-8-jre icedtea-8-plugin unzip python3 curl -y
+
+if [[ $* != *--clean* && $* != *-c* ]]; then
+  apt install htop iftop tiptop fail2ban unattended-upgrades vim -y
+fi
+
+adduser triplea
+passwd -l triplea
+
+echo "Once good, next step is to run 'install_all'"
+echo "Congrats, all dependencies have been setup"

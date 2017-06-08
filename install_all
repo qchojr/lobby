@@ -1,24 +1,24 @@
 #!/bin/bash
 
-VERSION=$1
-
-if [ -z "$VERSION" ]; then
-  echo "usage: $(basename $0) [version]"
-  echo " example: $(basename $0) 1.9.0.0.3500"
-  exit 1  
+if [[ $* == *--help* ||  $* == *-h* ]]; then
+  echo "Usage: $(basename $0) [version]"
+  echo "Example: $(basename $0) 1.9.0.0.3500"
+  exit 0
 fi
 
+cd $(dirname $0)
+
+chmod +x ./*
+
+VERSION=${1:-'latest'}
+
 ## get all maps
-mkdir -p bots/maps
-cd bots/maps
-../../download_all_maps
-cd ../../
+mkdir -p ./maps
+cd ./maps
+../download_all_maps
+cd ../
+mkdir -p /home/triplea/bots
+cp ./maps /home/triplea/bots
 
 ## install bot game engine
-./install_bot $VERSION bots/
-vim bots/*/run_bot
-
-## mv installed files to triplea user home folder 
-sudo mv bots/ /home/triplea/
-sudo chown -R triplea:triplea /home/triplea/
-
+./install_bot $VERSION /home/triplea/bots
