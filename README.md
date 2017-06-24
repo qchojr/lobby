@@ -52,3 +52,46 @@ pause
 ### Bot Maintenance
 
 Maps need to be updated periodically to stay with the latest. The following script is meant to help and will download all maps: https://github.com/triplea-game/lobby/blob/master/download_all_maps  (future work: add configuration here for how to set this script up in a cronjob, and then copy-in and replace the old maps automatically)
+
+## Lobby Install
+
+It is cloned on the triplea account on the server @ /home/triplea/lobby-scripts
+
+To install, from the server with an account that has 'sudo -u triplea' access, run:
+```
+@tripleawarclub:/home/triplea/lobby-scripts$ git pull --rebase
+@tripleawarclub:/home/triplea/lobby-scripts$ sudo -u triplea ./install_lobby 1.9.0.0.3096 ../lobby_1_9/
+@tripleawarclub:/home/triplea/lobby-scripts$ sudo -u triplea ./install_bot 1.9.0.0.3096 ../bots_1_9/
+@tripleawarclub:/home/triplea/lobby-scripts$ cd ../lobby_1.9.0.0.3096/
+@tripleawarclub:/home/triplea/lobby_1_9/lobby_1.9.0.0.3096$ ps -ef | grep 3304
+triplea   8095  8093  0 Sep05 ?        00:02:15 java -server -Xmx256m -classpath bin/triplea.jar:lib/derby-10.10.1.1.jar -Dtriplea.lobby.port=3304 games.strategy.engine.lobby.server.LobbyServer
+@tripleawarclub:/home/triplea/lobby_1_9/lobby_1.9.0.0.3096$ sudo kill 8095
+@tripleawarclub:/home/triplea/lobby_1_9/lobby_1.9.0.0.3096$ sudo -u triplea cp -r ../lobby_1.9.0.0.3074/derby_db/ ./
+@tripleawarclub:/home/triplea/lobby_1_9/lobby_1.9.0.0.3096$ sudo chmod +x run_lobby
+@tripleawarclub:/home/triplea/lobby_1_9/lobby_1.9.0.0.3096$ sudo -u triplea nohup ./run_lobby &
+```
+
+If you are running multiple lobby servers at the same time, you will need to edit the `run_lobby` file and change the port number (if this becomes common, we'll want to include it is a param).  Also assumed is that the port is enabled in ufw.
+
+
+Download all maps for a robot, and run lobby bots:
+```
+@tripleawarclub:/home/triplea/lobby-scripts$ sudo -u triplea mkdir maps
+@tripleawarclub:/home/triplea/lobby-scripts$ cd maps
+## downloads all maps to the current folder
+@tripleawarclub:/home/triplea/lobby-scripts/maps$ sudo -u triplea ../download_all_maps
+@tripleawarclub:/home/triplea/lobby-scripts/maps$ cd ../
+@tripleawarclub:/home/triplea/lobby-scripts$ sudo rm -rf ../bots_1_9/maps/
+@tripleawarclub:/home/triplea/lobby-scripts$ sudo -u triplea mv maps/ ../bots_1_9/
+
+## now start bots
+@tripleawarclub:/home/triplea/lobby-scripts$ cd ../bots_1_9/bot_1.9.0.0.3096/
+
+## launches a bot on port 4001, numbered: 1
+@tripleawarclub:/home/triplea/bots_1_9/bot_1.9.0.0.3096$ sudo -u triplea nohup ./run_bot 4001 1 &
+
+## view the logs after launching our bot, check for map errors or startup errors
+@tripleawarclub:/home/triplea/bots_1_9/bot_1.9.0.0.3096$ tail -f logs/headless-game-server-Bot1_WarClub-log0.txt
+```
+
+If you run the bots and the bots say there are errors parsing any maps, then we need to stop and quit the bot, then go delete those maps.  
