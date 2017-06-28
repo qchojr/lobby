@@ -95,3 +95,22 @@ Download all maps for a robot, and run lobby bots:
 ```
 
 If you run the bots and the bots say there are errors parsing any maps, then we need to stop and quit the bot, then go delete those maps.  
+
+### Lobby DB Setup
+
+
+## Install DB - steps from: https://help.ubuntu.com/community/PostgreSQL
+
+```
+sudo apt-get install postgresql postgresql-contrib
+sudo -u postgres psql postgres
+
+## Set password
+\password postgres
+
+## Set up DB
+export PGPASSWORD= $( grep password ../lobby.properties | sed 's/.*=//') 
+echo "create database ta_users" | psql -h localhost -U postgres
+
+wget https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/db/001_create_tables
+```
