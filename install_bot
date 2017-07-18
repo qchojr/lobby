@@ -38,7 +38,7 @@ mkdir -p $DESTINATION_FOLDER
 echo "$BOT_VERSION" > $DESTINATION_FOLDER/version
 
 echo "Unpacking $FILE to: $DESTINATION_FOLDER"
-unzip -d $DESTINATION_FOLDER $FILE -o
+unzip -o -d $DESTINATION_FOLDER $FILE
 rm $FILE
 
 # copy scripts

@@ -37,7 +37,7 @@ mkdir -p $DESTINATION_FOLDER
 echo "$LOBBY_VERSION" > $DESTINATION_FOLDER/version
 
 echo "Unpacking $FILE to: $DESTINATION_FOLDER"
-unzip -d $DESTINATION_FOLDER $FILE -o
+unzip -o -d $DESTINATION_FOLDER $FILE
 rm $FILE
 
 # copy the run_lobby script, should be in same same folder as this script

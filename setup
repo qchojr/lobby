@@ -6,7 +6,7 @@ if [[ $USER != "root" ]]; then
   exit 1
 fi
 
-apt install openjdk-8-jre icedtea-8-plugin unzip python3 curl unzip -y
+apt install openjdk-8-jre icedtea-8-plugin openjfx python3 curl unzip -y
 
 if [[ $* != *--clean* && $* != *-c* ]]; then
   apt install htop iftop tiptop fail2ban unattended-upgrades vim -y
