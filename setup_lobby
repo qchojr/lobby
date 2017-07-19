@@ -79,21 +79,7 @@ systemctl daemon-reload
 chown -R triplea:triplea /home/triplea
 
 
-DB_PASSWORD=""
-while -z "$DB_PASSWORD"; do
-  echo -n "Enter DB password: "
-  read -s DB_PASSWORD
-done;
-
-LOBBY_PROPERTIES_FILE="$DESTINATION_FOLDER/config/lobby/lobby.properties"
-sed -i "s/^postgres_password.*/postgres_password = $DB_PASSWORD/" $LOBBY_PROPERTIES_FILE
-
-export PGPASSWORD="$DB_PASSWORD"
-echo "alter user postgres with password '$DB_PASSWORD';" | sudo -u postgres psql postgres
-echo "create database ta_users" | psql -h localhost -U postgres
-curl https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/db/001_create_tables \
-   | psql -h localhost -U postgres
-
+echo "Make sure to update the DB password in: $DESTINATION_FOLDER/config/lobby/lobby.properties"
 
 echo "Start lobby with: 'sudo service triplea-lobby start', can also do 'stop|restart' as well" \
    | tee /home/triplea/LOBBY-README.txt
