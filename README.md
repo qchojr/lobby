@@ -9,23 +9,14 @@ Anyone who has the ability to host a game in the tripleA 1.9 Lobby can also host
 
 Insructions below assume you are root on a very brand new linode machine (Ubuntu 16.04):
 ```
-sudo apt-get install -y git
-git clone https://github.com/triplea-game/lobby.git
-cd lobby
-
-./setup
-./install_all <latest_version_number, eg: 1.9.0.0.5500> #Leave blank for latest version
-
-sudo service triplea-bot@0 start
-sudo service triplea-bot@1 start
-sudo service triplea-bot@2 start
+wget https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot
+./setup_bot latest DE 40 5
 ```
 
-The above will create a `triplea` user account, and another one of your choosing.
-Install all will download maps and bot binary files. It will then move it all
-to `/home/triplea/bots/`
+## Running bots
+Start/stop scripts are in `/home/triplea`
+For reference, commands that can be run are in: `/home/triplea/README.txt`
 
-If you want to remove the lobby and the bots later, run uninstall_lobby and uninstall_bot in their respective installation folders with sudo
 
 
 ### Hosting Bots on Windows
@@ -52,6 +43,13 @@ pause
 ### Bot Maintenance
 
 Maps need to be updated periodically to stay with the latest. The following script is meant to help and will download all maps: https://github.com/triplea-game/lobby/blob/master/download_all_maps  (future work: add configuration here for how to set this script up in a cronjob, and then copy-in and replace the old maps automatically)
+
+
+To update maps, simply run:
+```
+cd /home/triplea/maps; ./download_all_maps
+```
+
 
 ## Lobby Install
 

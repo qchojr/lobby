@@ -1,0 +1,128 @@
+#!/bin/bash
+
+BOT_SERVICE_SCRIPT_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/triplea-bot%40.service"
+BOT_SERVICE_SCRIPT="triplea-bot@.service"
+DOWNLOAD_ALL_MAPS_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/download_all_maps"
+DOWNLOAD_ALL_MAPS_SCRIPT="download_all_maps"
+                
+RUN_BOT_SCRIPT="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/run_bot"
+UNINSTALL_BOT_SCRIPT="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/uninstall_bot"
+
+if [[ $USER != "root" ]]; then
+  echo "This script must be run as root"
+  echo "Type 'sudo $0'"
+  exit 1
+fi
+
+function usage() {
+  echo "$(basename $0) <version> <bot_name> <bot_start_number> <number_of_bots>"
+  echo " version: can be 'latest', otherwise something like '1.9.0.0.3521'"
+  echo " bot_name: name used for the bot, typically matches server region, eg: 'NJ_US'"
+  echo " bot_start_number: bots are numbered, numbers should be unique, this is the start number for the bots \
+         installed on this server"
+  echo " number_of_bots: how many bot instances are to be installed/running on this server."
+  echo ""
+  echo "Notes:"
+  echo " - files are installed to /home/triplea/bots/<version>"
+  echo " - bot maps are installed to /home/triplea/maps"
+  exit 1 
+}
+
+VERSION=$1
+BOT_NAME=$2
+START_NUMBER=$3
+BOT_COUNT=$4
+
+set -eu
+
+if [ -z "$BOT_COUNT" ]; then
+  usage
+fi
+
+
+echo "Install system packages and dependencies" | cowsay
+
+apt-get update
+apt -y install openjdk-8-jre icedtea-8-plugin openjfx python3 curl unzip \
+   cowsay htop iftop tiptop fail2ban unattended-upgrades vim
+
+echo "create triplea user if does not exist" | cowsay
+
+grep -q triplea /etc/passwd || adduser triplea && passwd -l triplea
+
+
+if [[ "$BOT_VERSION" == "latest" ]]; then
+  # get latest version from github
+  BOT_VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' \
+	| python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])")
+fi
+	
+echo "Install bot version: $BOT_VERSION" | cowsay
+
+HELP_FILE="/home/triplea/README.txt"
+
+function nonRootInstall() {
+	## install bot maps
+
+	mkdir -p /home/triplea/maps
+	cd /home/triplea/maps
+	wget $DOWNLOAD_ALL_MAPS_URL
+	chmod +x $DOWNLOAD_ALL_MAPS_SCRIPT
+	./$DOWNLOAD_ALL_MAPS_SCRIPT
+
+	echo "maps can be updated by running 'cd /home/triplea/maps/; ./$DOWNLOAD_ALL_MAPS_SCRIPT'" > $HELP_FILE
+
+	## install bot java executable
+
+	mkdir -p /home/triplea/bots
+	cd /home/triplea/bots
+
+
+	FILE_SUFFIX="all_platforms.zip"
+	DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$BOT_VERSION/triplea-$BOT_VERSION-$FILE_SUFFIX"
+	echo "Download from $DOWNLOAD_URL"
+	wget $DOWNLOAD_URL
+
+	FILE=$(ls | grep "$BOT_VERSION-$FILE_SUFFIX$")
+	mkdir -p $DESTINATION_FOLDER/$BOT_VERSION
+	
+        unzip -d $DESTINATION_FOLDER/$BOT_VERSION $FILE
+        (
+                cd $DESTINATION_FOLDER/$BOT_VERSION
+                wget $RUN_BOT_SCRIPT
+                wget $UNINSTALL_BOT_SCRIPT
+        )
+	rm $FILE
+}
+
+sudo -u triplea nonRootInstall
+
+echo "install bot service scripts" | cowsay
+
+cd /lib/systemd/system/
+wget "$BOT_SERVICE_SCRIPT_URL"
+sed -i "s|BOT_DIR|$DESTINATION_FOLDER/$BOT_VERSION|" "./triplea-bot@.service"
+sed -i "s|BOT_NAME|$BOT_NAME|" "./triplea-bot@.service"
+systemctl daemon-reload
+
+
+echo "open bot ports and drop start scripts in /home/triplea" | cowsay
+
+for i in $(seq 0 $BOT_COUNT); do
+  BOT_NUMBER=$((START_NUMBER+BOT_COUNT-1))
+  BOT_PORT="40$BOT_NUMBER"
+  ufw allow $BOT_PORT
+
+  ## create bot start/stop scripts
+  echo "Opened port $BOT_PORT for bot number $BOT_NUMBER"
+  echo "sudo service triplea-bot@$BOT_NUMBER start" > /home/triplea/start_bot_$BOT_NUMBER
+  echo "sudo service triplea-bot@$BOT_NUMBER restart" > /home/triplea/restart_bot_$BOT_NUMBER
+  echo "sudo service triplea-bot@$BOT_NUMBER stop" > /home/triplea/stop_bot_$BOT_NUMBER
+  chmod +x /home/triplea/stop_bot* /home/triplea/start_bot* /home/triplea/restart_bot*
+  echo "You can restart bot $BOT_NUMBER by running the comand '/home/triplea/restart_bot_$BOT_NUMBER'" > $HELP_FILE
+  ## TODO: add a status script
+done
+
+echo "y" | ufw enable
+
+echo "Finished" | cowsay

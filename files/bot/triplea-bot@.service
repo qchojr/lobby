@@ -3,10 +3,10 @@ Description=TripleA Bot %i
 Documentation=https://github.com/triplea-game/lobby/blob/master/README.md
 
 [Service]
-Environment="PORT=400%i"
+Environment=
 WorkingDirectory=BOT_DIR
 User=triplea
-ExecStart=BOT_DIR/run_bot $PORT %i
+ExecStart=BOT_DIR/run_bot 40%i %i BOT_NAME
 Restart=always
 
 [Install]
