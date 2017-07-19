@@ -1,17 +1,13 @@
 # lobby
-- Script repo for lobby and bot setup
-
-## Run Hosted Bots
-Anyone who has the ability to host a game in the tripleA 1.9 Lobby can also host one or more bot's in the lobby for others to use. Here is how.
-
-
+- Documentationa and install scripts for lobby and bots
 
 
 ## Linux Bot install
 
-Insructions below assume you are root on a very brand new linode machine (Ubuntu 16.04):
+As root on a brand new linode machine (Ubuntu 16.04):
 ```
  rm setup_bot*; wget --no-cache https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot; chmod +x setup_bot
+
 ./setup_bot latest DE 40 5
 ./setup_bot latest JP 50 5
 ./setup_bot latest GA_USA 60 5
@@ -21,10 +17,7 @@ Insructions below assume you are root on a very brand new linode machine (Ubuntu
 ```
 
 ## Running bots
-Start/stop scripts are in `/home/triplea`
-For reference, commands that can be run are in: `/home/triplea/README.txt`
-
-
+Log in as triplea user, start/stop scripts are in `/home/triplea`
 
 ### Hosting Bots on Windows
 
