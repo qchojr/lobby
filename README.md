@@ -74,6 +74,34 @@ Maps need to be updated periodically, run:
 cd /home/triplea/maps; ./download_all_maps
 ```
 
+## More on Bots
+```
+sudo service triplea-bot@<bot_number> start|stop|status|restart
+```
+_bot_number_ is used to make multiple bots possible. Use unique bot numbers across all servers to avoid confusion. Bots currently use up a lot of RAM, probably too much, this is why only a limited amount of bots can be run on a single server.
+
+Every bot needs its own opened port. We recommend ufw as an easy-to-use tool for managing firewall rules.
+The default port is `400${BOT_NUMBER}`, e.g. bot 10 uses port 40010.
+
+### Easy restarting
+If we now want to restart all default bots, we run:
+```
+cd /home/triplea/; ./restart_all
+```
+This launches all default bots we defined in our starter service file.
+Depending on how many maps are loaded, it may take up to 10 minutes until the bots are online.
+
+### Updating
+
+Re-run the install_bot script
+
+
+### Log files
+Currently TripleA creates log files on its own without relying on stdout.
+If anything ever goes wrong, or we just want to check the log files for another reason, we need to look inside the logs directory of the installation folder.
+The log folder is located at `/home/triplea/bots/logs/` by default.
+
+
 
 
 ## Adding Linode servers
@@ -108,31 +136,4 @@ Now you can log in as root, and run the bot setup script.
 ```
 - Restart the linode
 
-
-## More on Bots
-```
-sudo service triplea-bot@<bot_number> start|stop|status|restart
-```
-_bot_number_ is used to make multiple bots possible. Use unique bot numbers across all servers to avoid confusion. Bots currently use up a lot of RAM, probably too much, this is why only a limited amount of bots can be run on a single server.
-
-Every bot needs its own opened port. We recommend ufw as an easy-to-use tool for managing firewall rules.
-The default port is `400${BOT_NUMBER}`, e.g. bot 10 uses port 40010.
-
-### Easy restarting
-If we now want to restart all default bots, we run:
-```
-cd /home/triplea/; ./restart_all
-```
-This launches all default bots we defined in our starter service file.
-Depending on how many maps are loaded, it may take up to 10 minutes until the bots are online.
-
-### Updating
-
-Re-run the install_bot script
-
-
-### Log files
-Currently TripleA creates log files on its own without relying on stdout.
-If anything ever goes wrong, or we just want to check the log files for another reason, we need to look inside the logs directory of the installation folder.
-The log folder is located at `/home/triplea/bots/logs/` by default.
 
