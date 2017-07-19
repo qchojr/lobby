@@ -39,16 +39,15 @@ if [ -z "$BOT_COUNT" ]; then
   usage
 fi
 
+echo "create triplea user if does not exist"
+grep -q triplea /etc/passwd || adduser triplea && passwd -l triplea
+
 
 echo "Install system packages and dependencies"
 
 apt-get update
 apt -y install openjdk-8-jre icedtea-8-plugin openjfx python3 curl unzip \
    cowsay htop iftop tiptop fail2ban unattended-upgrades vim
-
-echo "create triplea user if does not exist" | cowsay
-
-grep -q triplea /etc/passwd || adduser triplea && passwd -l triplea
 
 
 if [[ "$VERSION" == "latest" ]]; then
@@ -60,16 +59,6 @@ fi
 echo "Install bot version: $VERSION" | cowsay
 
 HELP_FILE="/home/triplea/README.txt"
-
-## install bot maps
-
-mkdir -p /home/triplea/maps
-cd /home/triplea/maps
-wget $DOWNLOAD_ALL_MAPS_URL
-chmod +x $DOWNLOAD_ALL_MAPS_SCRIPT
-./$DOWNLOAD_ALL_MAPS_SCRIPT
-
-echo "maps can be updated by running 'cd /home/triplea/maps/; ./$DOWNLOAD_ALL_MAPS_SCRIPT'" > $HELP_FILE
 
 ## install bot java executable
 
@@ -122,4 +111,14 @@ chown -R triplea:triplea /home/triplea
 
 echo "y" | ufw enable
 
+
+echo "installing bot maps" | cowsay
+
+mkdir -p /home/triplea/maps
+cd /home/triplea/maps
+wget $DOWNLOAD_ALL_MAPS_URL
+chmod +x $DOWNLOAD_ALL_MAPS_SCRIPT
+./$DOWNLOAD_ALL_MAPS_SCRIPT
+
+echo "maps can be updated by running 'cd /home/triplea/maps/; ./$DOWNLOAD_ALL_MAPS_SCRIPT'" > $HELP_FILE
 echo "Finished" | cowsay
