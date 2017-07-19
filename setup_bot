@@ -89,6 +89,8 @@ sed -i "s|BOT_NAME|$BOT_NAME|" "./triplea-bot@.service"
 systemctl daemon-reload
 
 grep -q "^triplea" /etc/sudoers || echo "triplea ALL=(ALL) /usr/sbin/service triplea-bot@*" >> /etc/sudoers
+grep -q "^triplea.*htop" /etc/sudoers || echo "triplea ALL=(ALL) /usr/bin/htop*" >> /etc/sudoers
+grep -q "^triplea.*iftop" /etc/sudoers || echo "triplea ALL=(ALL) /usr/bin/iftop" >> /etc/sudoers
 
 
 echo "open bot ports and drop start scripts in /home/triplea" | cowsay
