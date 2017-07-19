@@ -114,8 +114,8 @@ for i in $(seq 1 $BOT_COUNT); do
   echo "You can restart bot $BOT_NUMBER by running the comand '/home/triplea/restart_bot_$BOT_NUMBER'" > $HELP_FILE
   ## TODO: add a status script
 
-  echo "sudo service triplea-bot@$BOT_NUMBER start &" >> /home/triplea/start_all
-  echo "sudo service triplea-bot@$BOT_NUMBER stop &" >> /home/triplea/stop_all
+  echo "sudo service triplea-bot@$BOT_NUMBER start" >> /home/triplea/start_all
+  echo "sudo service triplea-bot@$BOT_NUMBER stop" >> /home/triplea/stop_all
 done
 
 chmod +x /home/triplea/start_all /home/triplea/stop_all
