@@ -74,13 +74,11 @@ FILE=$(ls | grep "$VERSION-$FILE_SUFFIX$")
 mkdir -p /home/triplea/bots/$VERSION
 
 unzip -d /home/triplea/bots/$VERSION $FILE
-(
-	cd /home/triplea/bots/$VERSION
-	wget $RUN_BOT_SCRIPT
-	wget $UNINSTALL_BOT_SCRIPT
-)
-rm $FILE
-su root
+
+cd /home/triplea/bots/$VERSION
+wget $RUN_BOT_SCRIPT
+wget $UNINSTALL_BOT_SCRIPT
+
 
 echo "install bot service scripts" | cowsay
 
