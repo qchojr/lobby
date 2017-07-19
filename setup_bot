@@ -76,8 +76,9 @@ unzip -d /home/triplea/bots/$VERSION $FILE
 
 cd /home/triplea/bots/$VERSION
 wget $RUN_BOT_SCRIPT
+chmod +x run_bot
 wget $UNINSTALL_BOT_SCRIPT
-
+chmod +x uninstall_bot
 
 echo "install bot service scripts" | cowsay
 
@@ -95,6 +96,9 @@ echo "open bot ports and drop start scripts in /home/triplea" | cowsay
 ## make sure we allow ssh port
 ufw allow 22
 
+rm /home/triplea/start_all
+rm /home/triplea/stop_all
+
 for i in $(seq 1 $BOT_COUNT); do
   BOT_NUMBER=$((START_NUMBER-1+i))
   BOT_PORT="40$BOT_NUMBER"
@@ -108,6 +112,9 @@ for i in $(seq 1 $BOT_COUNT); do
   chmod +x /home/triplea/stop_bot* /home/triplea/start_bot* /home/triplea/restart_bot*
   echo "You can restart bot $BOT_NUMBER by running the comand '/home/triplea/restart_bot_$BOT_NUMBER'" > $HELP_FILE
   ## TODO: add a status script
+
+  echo "sudo service triplea-bot@$BOT_NUMBER start &" >> /home/triplea/start_all
+  echo "sudo service triplea-bot@$BOT_NUMBER stop &" >> /home/triplea/stop_all
 done
 
 echo "y" | ufw enable
