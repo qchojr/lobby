@@ -36,7 +36,7 @@ LOBBY_VERSION=${1:-'latest'}
 PORT=${2:-'3303'}
 DESTINATION_FOLDER=${3:-'/home/triplea/lobby'}
 
-set -eu
+set -eux
 
 
 grep -q triplea /etc/passwd || adduser triplea
@@ -60,7 +60,7 @@ mkdir -p $DESTINATION_FOLDER
 DOWNLOAD_FILE="triplea-$LOBBY_VERSION-server.zip"
 DOWNLOAD_FILE_URL="https://github.com/triplea-game/triplea/releases/download/$LOBBY_VERSION/$DOWNLOAD_FILE"
 rm -f $DOWNLOAD_FILE
-wget $DOWNLOAD_FILE_URL > $DOWNLOAD_FILE
+wget $DOWNLOAD_FILE_URL
 unzip -o -d $DESTINATION_FOLDER $DOWNLOAD_FILE
 rm $DOWNLOAD_FILE
 
