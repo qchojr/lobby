@@ -18,7 +18,7 @@ As root on a brand new linode machine (Ubuntu 16.04):
 
 ## Lobby Install
 ```
-rm setup_lobby; wget --no-cache https://raw.githubusercontent.com/triplea-game/lobby/master/setup_lobby; chmod +x setup_lobby
+rm -f setup_lobby; wget --no-cache https://raw.githubusercontent.com/triplea-game/lobby/master/setup_lobby; chmod +x setup_lobby
 ./setup_lobby
 ```
 
