@@ -107,7 +107,6 @@ for i in $(seq 1 $BOT_COUNT); do
   echo "You can restart bot $BOT_NUMBER by running the comand '/home/triplea/restart_bot_$BOT_NUMBER'" > $HELP_FILE
   ## TODO: add a status script
 done
-chown -R triplea:triplea /home/triplea
 
 echo "y" | ufw enable
 
@@ -119,6 +118,9 @@ cd /home/triplea/maps
 wget $DOWNLOAD_ALL_MAPS_URL
 chmod +x $DOWNLOAD_ALL_MAPS_SCRIPT
 ./$DOWNLOAD_ALL_MAPS_SCRIPT
-
 echo "maps can be updated by running 'cd /home/triplea/maps/; ./$DOWNLOAD_ALL_MAPS_SCRIPT'" > $HELP_FILE
-echo "Finished" | cowsay
+
+
+chown -R triplea:triplea /home/triplea
+echo "Finished - log back in as user 'triplea' and start those bots!" | cowsay
+
