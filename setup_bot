@@ -40,7 +40,7 @@ if [ -z "$BOT_COUNT" ]; then
 fi
 
 
-echo "Install system packages and dependencies" | cowsay
+echo "Install system packages and dependencies"
 
 apt-get update
 apt -y install openjdk-8-jre icedtea-8-plugin openjfx python3 curl unzip \
