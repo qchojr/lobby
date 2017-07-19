@@ -8,12 +8,12 @@ As root on a brand new linode machine (Ubuntu 16.04):
 ```
  rm setup_bot*; wget --no-cache https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot; chmod +x setup_bot
 
-./setup_bot latest DE 40 5
-./setup_bot latest JP 50 5
-./setup_bot latest GA_USA 60 5
-./setup_bot latest NJ_USA 70 5
-./setup_bot latest CA_USA 80 5
-./setup_bot latest TX_USA 90 5
+./setup_bot latest DE 40 4
+./setup_bot latest JP 50 4
+./setup_bot latest GA_USA 60 4
+./setup_bot latest NJ_USA 70 4
+./setup_bot latest CA_USA 80 4
+./setup_bot latest TX_USA 90 4
 ```
 
 ## Running bots
