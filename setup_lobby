@@ -6,8 +6,6 @@ UNINSTALL_LOBBY_URL="https://raw.githubusercontent.com/triplea-game/lobby/master
 RUN_LOBBY="run_lobby"
 RUN_LOBBY_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/run_lobby"
 
-DOWNLOAD_FILE="triplea-$LOBBY_VERSION-server.zip"
-DOWNLOAD_FILE_URL="https://github.com/triplea-game/triplea/releases/download/$LOBBY_VERSION/$DOWNLOAD_FILE"
 
 SERVICE_FILE="triplea-lobby.service"
 SERVICE_FILE_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/triplea-lobby.service" 
@@ -46,9 +44,8 @@ grep -q triplea /etc/passwd || adduser triplea
 apt -y install openjdk-8-jre openjfx python3 curl unzip postgresql postgresql-contrib \
    cowsay htop iftop tiptop fail2ban unattended-upgrades vim
 
-echo "Input the postgres DB password"
-
-ufw allow 22 $PORT
+ufw allow 22
+ufw allow $PORT
 echo "y" | ufw enable
 
 # Retrieve latest triplea version
@@ -60,7 +57,10 @@ fi
 DESTINATION_FOLDER=$DESTINATION_FOLDER/$LOBBY_VERSION
 mkdir -p $DESTINATION_FOLDER
 
-curl $DOWNLOAD_FILE_URL > $DOWNLOAD_FILE
+DOWNLOAD_FILE="triplea-$LOBBY_VERSION-server.zip"
+DOWNLOAD_FILE_URL="https://github.com/triplea-game/triplea/releases/download/$LOBBY_VERSION/$DOWNLOAD_FILE"
+rm -f $DOWNLOAD_FILE
+wget $DOWNLOAD_FILE_URL > $DOWNLOAD_FILE
 unzip -o -d $DESTINATION_FOLDER $DOWNLOAD_FILE
 rm $DOWNLOAD_FILE
 
