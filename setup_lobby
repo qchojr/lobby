@@ -41,7 +41,7 @@ set -eux
 
 grep -q triplea /etc/passwd || adduser triplea
 
-grep -q "^triplea" /etc/sudoers || echo "triplea ALL=(ALL) /usr/sbin/service triplea-bot@*" >> /etc/sudoers
+grep -q "^triplea" /etc/sudoers || echo "triplea ALL=(ALL) /usr/sbin/service triplea-lobby" >> /etc/sudoers
 grep -q "^triplea.*htop" /etc/sudoers || echo "triplea ALL=(ALL) /usr/bin/htop*" >> /etc/sudoers
 grep -q "^triplea.*iftop" /etc/sudoers || echo "triplea ALL=(ALL) /usr/bin/iftop" >> /etc/sudoers
 
