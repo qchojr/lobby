@@ -1,6 +1,12 @@
 #!/bin/bash
 
 
+if [[ $USER != "root" ]]; then
+  echo "This script must be run as root"
+  echo "Type 'sudo $0'"
+  exit 1
+fi
+
 function usage() {
   echo "Usage: $(basename $0) [lobby_version] [destination_folder]"
   echo "Example: $0 1.9.0.0.2668 /home/triplea/lobby"
@@ -24,7 +30,8 @@ apt -y install openjdk-8-jre openjfx python3 curl unzip \
    cowsay htop iftop tiptop fail2ban unattended-upgrades vim
 
 
-adduser triplea
+grep -q triplea /etc/passwd || adduser triplea
+
 
 # Retrieve latest triplea version
 if [[ "$LOBBY_VERSION" == "latest" ]]; then
