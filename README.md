@@ -144,3 +144,7 @@ Use defaults, set password, record it in the secret admin password registry:
 
 Now you can log in as root, and run the bot setup script. 
 TODO: set up the 'sudo' admin users
+
+### Update host name
+- Edit `/etc/hostname`, put the hostname in the that file and save
+- Restart the linode
