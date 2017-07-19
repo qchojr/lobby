@@ -10,18 +10,21 @@ rm -f setup_lobby; wget --no-cache https://raw.githubusercontent.com/triplea-gam
 
 ## DB setup
 
-sudo apt-get install postgresql postgresql-contrib
-sudo -u postgres psql postgres
-
 ### Set password
+```
+sudo -u postgres psql postgres
 \password postgres
 
+```
+
 ### Set up DB
+```
 export PGPASSWORD={db password}
 echo "create database ta_users" | psql -h localhost -U postgres
 
 wget https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/db/001_create_tables
 cat 001_create_tables | psql -h localhost -U postgres
+```
 
 # Bots
 
