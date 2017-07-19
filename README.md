@@ -19,7 +19,11 @@ sudo -u postgres psql postgres
 
 ### Set up DB
 ```
-export PGPASSWORD={db password}
+## update postgres user password after a fresh install
+echo "alter user postgres with password 'abc';" | sudo -u postgres psql postgres
+
+## set magic env variable to remember the postgres user password and not be prompted
+export PGPASSWORD=abc
 echo "create database ta_users" | psql -h localhost -U postgres
 
 wget https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/db/001_create_tables
