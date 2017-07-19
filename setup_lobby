@@ -1,14 +1,18 @@
 #!/bin/bash
 
-if [[ $* == *--help* ||  $* == *-h* ]]; then
+
+function usage() {
   echo "Usage: $(basename $0) [lobby_version] [destination_folder]"
   echo "Example: $0 1.9.0.0.2668 /home/triplea/lobby"
   echo "lobby_version: triplea-version of the lobby. Set to latest or leave blank to install the latest version"
   echo "destination_folder: Installation folder of the lobby. Defaults to /home/triplea/lobby"
-  exit 0
+  exit 1
+}
+
+if [[ $* == *--help* ||  $* == *-h* ]]; then
+  usage
 fi
 
-cd $(dirname $0)
 
 LOBBY_VERSION=${1:-'latest'}
 DESTINATION_FOLDER=${2:-'/home/triplea/lobby'}
@@ -20,12 +24,9 @@ if [[ "$LOBBY_VERSION"== "latest" ]]; then
   LOBBY_VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' | python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])")
 fi
 
-VERSION_FILE="$DESTINATION_FOLDER/version"
-if [[ ! ($* == *--force* || $* == *-f*) && -f "$VERSION_FILE" && "$LOBBY_VERSION" == "$(<$VERSION_FILE)" ]]; then
-  echo "Version $LOBBY_VERSION is already installed"
-  echo "Run with -f or --force to force the installation"
-  exit 0
-fi
+DESTINATION_FOLDER=$DESTINATION_FOLDER/$LOBBY_VERSION
+mkdir -p $DESTINATION_FOLDER
+
 
 DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$LOBBY_VERSION/triplea-$LOBBY_VERSION-server.zip"
 echo "Download from $DOWNLOAD_URL"
@@ -33,22 +34,26 @@ wget $DOWNLOAD_URL
 
 FILE=$(ls | grep "$LOBBY_VERSION-server.zip$")
 
-mkdir -p $DESTINATION_FOLDER
-echo "$LOBBY_VERSION" > $DESTINATION_FOLDER/version
-
 echo "Unpacking $FILE to: $DESTINATION_FOLDER"
-unzip -o -d $DESTINATION_FOLDER $FILE
+unzip -d $DESTINATION_FOLDER $FILE
 rm $FILE
 
-# copy the run_lobby script, should be in same same folder as this script
-cp ./run_lobby "$DESTINATION_FOLDER"
-cp ./uninstall_lobby "$DESTINATION_FOLDER"
 
-sed "s|LOBBY_DIR|$DESTINATION_FOLDER|" "./triplea-lobby.service" > "./triplea-lobby.service.custom"
-sudo mv "./triplea-lobby.service.custom" "/lib/systemd/system/triplea-lobby.service"
+# copy the run_lobby script, should be in same same folder as this script
+wget https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/run_lobby
+chmod +x run_lobby
+mv run_lobby "$DESTINATION_FOLDER"
+
+wget https://github.com/triplea-game/lobby/blob/master/files/lobby/uninstall_lobby
+chmod +x uninstall_lobby
+mv uninstall_lobby "$DESTINATION_FOLDER"
+
+wget https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/triplea-lobby.service
+sed -i "s|LOBBY_DIR|$DESTINATION_FOLDER|" "./triplea-lobby.service"
+sudo mv "./triplea-lobby.service" "/lib/systemd/system/triplea-lobby.service"
 sudo systemctl enable triplea-lobby
 sudo systemctl daemon-reload
 
-sudo chown -R triplea:triplea $DESTINATION_FOLDER
+sudo chown -R triplea:triplea /home/triplea
 
-echo "You can now start the lobby using 'sudo service triplea-lobby start' or 'sudo systemctl start triplea-lobby'"
+echo "Start lobby with: 'sudo service triplea-lobby start', can also do 'stop|restart' as well" > /home/triplea/LOBBY-README.txt
