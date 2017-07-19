@@ -96,8 +96,7 @@ echo "open bot ports and drop start scripts in /home/triplea" | cowsay
 ## make sure we allow ssh port
 ufw allow 22
 
-rm /home/triplea/start_all
-rm /home/triplea/stop_all
+rm -f /home/triplea/start_all /home/triplea/stop_all
 
 for i in $(seq 1 $BOT_COUNT); do
   BOT_NUMBER=$((START_NUMBER-1+i))
