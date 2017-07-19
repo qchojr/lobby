@@ -1,5 +1,18 @@
 #!/bin/bash
 
+UNINSTALL_LOBBY="uninstall_lobby"
+UNINSTALL_LOBBY_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/$UNINSTALL_LOBBY"
+
+RUN_LOBBY="run_lobby"
+RUN_LOBBY_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/run_lobby"
+
+DOWNLOAD_FILE="triplea-$LOBBY_VERSION-server.zip"
+DOWNLOAD_FILE_URL="https://github.com/triplea-game/triplea/releases/download/$LOBBY_VERSION/$DOWNLOAD_FILE"
+
+SERVICE_FILE="triplea-lobby.service"
+SERVICE_FILE_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/triplea-lobby.service" 
+SERVICE_FILE_PATH="/lib/systemd/system/$SERVICE_FILE"
+
 
 if [[ $USER != "root" ]]; then
   echo "This script must be run as root"
@@ -8,10 +21,11 @@ if [[ $USER != "root" ]]; then
 fi
 
 function usage() {
-  echo "Usage: $(basename $0) [lobby_version] [destination_folder]"
+  echo "Usage: $(basename $0) [lobby_version] [port] [destination_folder]"
   echo "Example: $0 1.9.0.0.2668 /home/triplea/lobby"
-  echo "lobby_version: triplea-version of the lobby. Set to latest or leave blank to install the latest version"
-  echo "destination_folder: Installation folder of the lobby. Defaults to /home/triplea/lobby"
+  echo "  lobby_version: triplea-version of the lobby. Set to latest or leave blank to install the latest version"
+  echo "  port: port to run the lobby on
+  echo "  destination_folder: Installation folder of the lobby. Defaults to /home/triplea/lobby"
   exit 1
 }
 
@@ -22,52 +36,50 @@ fi
 
 
 LOBBY_VERSION=${1:-'latest'}
-DESTINATION_FOLDER=${2:-'/home/triplea/lobby'}
+PORT=${2:-'3303'}
+DESTINATION_FOLDER=${3:-'/home/triplea/lobby'}
 
 set -eu
-
-apt -y install openjdk-8-jre openjfx python3 curl unzip \
-   cowsay htop iftop tiptop fail2ban unattended-upgrades vim
 
 
 grep -q triplea /etc/passwd || adduser triplea
 
+apt -y install openjdk-8-jre openjfx python3 curl unzip postgresql postgresql-contrib \
+   cowsay htop iftop tiptop fail2ban unattended-upgrades vim
+
+echo "Input the postgres DB password"
+
+ufw allow 22 $PORT
+echo "y" | ufw enable
+
 
 # Retrieve latest triplea version
 if [[ "$LOBBY_VERSION" == "latest" ]]; then
-  LOBBY_VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' | python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])")
+  LOBBY_VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' \
+        | python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])")
 fi
 
 DESTINATION_FOLDER=$DESTINATION_FOLDER/$LOBBY_VERSION
 mkdir -p $DESTINATION_FOLDER
 
-
-DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$LOBBY_VERSION/triplea-$LOBBY_VERSION-server.zip"
-echo "Download from $DOWNLOAD_URL"
-wget $DOWNLOAD_URL
-
-FILE=$(ls | grep "$LOBBY_VERSION-server.zip$")
-
-echo "Unpacking $FILE to: $DESTINATION_FOLDER"
-unzip -d $DESTINATION_FOLDER $FILE
-rm $FILE
+curl $DOWNLOAD_FILE_URL > $DOWNLOAD_FILE
+unzip -o -d $DESTINATION_FOLDER $DOWNLOAD_FILE
+rm $DOWNLOAD_FILE
 
 
-# copy the run_lobby script, should be in same same folder as this script
-wget https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/run_lobby
-chmod +x run_lobby
-mv run_lobby "$DESTINATION_FOLDER"
+curl $RUN_LOBBY_URL > $DESTINATION_FOLDER/$RUN_LOBBY
+curl $UNINSTALL_LOBBY_URL > $DESTINATION_FOLDER/$UNINSTALL_LOBBY
+chmod +x $DESTINATION_FOLDER/$RUN_LOBBY $DESTINATION_FOLDER/$UNINSTALL_LOBBY
 
-wget https://github.com/triplea-game/lobby/blob/master/files/lobby/uninstall_lobby
-chmod +x uninstall_lobby
-mv uninstall_lobby "$DESTINATION_FOLDER"
 
-wget https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/triplea-lobby.service
-sed -i "s|LOBBY_DIR|$DESTINATION_FOLDER|" "./triplea-lobby.service"
-sudo mv "./triplea-lobby.service" "/lib/systemd/system/triplea-lobby.service"
-sudo systemctl enable triplea-lobby
-sudo systemctl daemon-reload
+curl $SERVICE_FILE_URL > $SERVICE_FILE_PATH
+sed -i "s|LOBBY_DIR|$DESTINATION_FOLDER|" $SERVICE_FILE_PATH
 
-sudo chown -R triplea:triplea /home/triplea
+systemctl enable triplea-lobby
+systemctl daemon-reload
+
+chown -R triplea:triplea /home/triplea
+
+# read -s DB_PASSWORD
 
 echo "Start lobby with: 'sudo service triplea-lobby start', can also do 'stop|restart' as well" > /home/triplea/LOBBY-README.txt
