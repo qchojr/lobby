@@ -61,7 +61,6 @@ echo "Install bot version: $VERSION" | cowsay
 
 HELP_FILE="/home/triplea/README.txt"
 
-su triplea
 ## install bot maps
 
 mkdir -p /home/triplea/maps
@@ -119,7 +118,7 @@ for i in $(seq 0 $BOT_COUNT); do
   echo "You can restart bot $BOT_NUMBER by running the comand '/home/triplea/restart_bot_$BOT_NUMBER'" > $HELP_FILE
   ## TODO: add a status script
 done
-
+chown -R triplea:triplea /home/triplea
 
 echo "y" | ufw enable
 
