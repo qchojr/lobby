@@ -82,11 +82,11 @@ echo "Download from $DOWNLOAD_URL"
 wget $DOWNLOAD_URL
 
 FILE=$(ls | grep "$VERSION-$FILE_SUFFIX$")
-mkdir -p $DESTINATION_FOLDER/$VERSION
+mkdir -p /home/triplea/bots/$VERSION
 
-unzip -d $DESTINATION_FOLDER/$VERSION $FILE
+unzip -d /home/triplea/bots/$VERSION $FILE
 (
-	cd $DESTINATION_FOLDER/$VERSION
+	cd /home/triplea/bots/$VERSION
 	wget $RUN_BOT_SCRIPT
 	wget $UNINSTALL_BOT_SCRIPT
 )
@@ -104,8 +104,8 @@ systemctl daemon-reload
 
 echo "open bot ports and drop start scripts in /home/triplea" | cowsay
 
-for i in $(seq 0 $BOT_COUNT); do
-  BOT_NUMBER=$((START_NUMBER+BOT_COUNT-1))
+for i in $(seq 1 $BOT_COUNT); do
+  BOT_NUMBER=$((START_NUMBER-1+i))
   BOT_PORT="40$BOT_NUMBER"
   ufw allow $BOT_PORT
 
