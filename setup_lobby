@@ -19,7 +19,9 @@ DESTINATION_FOLDER=${2:-'/home/triplea/lobby'}
 
 set -eu
 
-#Retrieve latest triplea version
+adduser triplea
+
+# Retrieve latest triplea version
 if [[ "$LOBBY_VERSION"== "latest" ]]; then
   LOBBY_VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' | python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])")
 fi
