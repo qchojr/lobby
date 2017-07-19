@@ -22,9 +22,10 @@ fi
 
 function usage() {
   echo "Usage: $(basename $0) [lobby_version] [port] [destination_folder]"
-  echo "Example: $0 1.9.0.0.2668 /home/triplea/lobby"
-  echo "  lobby_version: triplea-version of the lobby. Set to latest or leave blank to install the latest version"
+  echo "Example: $0 1.9.0.0.2668 3303 /home/triplea/lobby"
+  echo "Example: $0 latest 3304
   echo "  port: port to run the lobby on
+  echo "  lobby_version: triplea-version of the lobby. Set to latest or leave blank to install the latest version"
   echo "  destination_folder: Installation folder of the lobby. Defaults to /home/triplea/lobby"
   exit 1
 }
@@ -32,8 +33,6 @@ function usage() {
 if [[ $* == *--help* ||  $* == *-h* ]]; then
   usage
 fi
-
-
 
 LOBBY_VERSION=${1:-'latest'}
 PORT=${2:-'3303'}
@@ -51,7 +50,6 @@ echo "Input the postgres DB password"
 
 ufw allow 22 $PORT
 echo "y" | ufw enable
-
 
 # Retrieve latest triplea version
 if [[ "$LOBBY_VERSION" == "latest" ]]; then
@@ -80,6 +78,10 @@ systemctl daemon-reload
 
 chown -R triplea:triplea /home/triplea
 
-# read -s DB_PASSWORD
+# while -z "$DB_PASSWORD"; do
+#  echo -n "Enter DB password: "
+#  read -s DB_PASSWORD
+# done;
+
 
 echo "Start lobby with: 'sudo service triplea-lobby start', can also do 'stop|restart' as well" > /home/triplea/LOBBY-README.txt
