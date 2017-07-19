@@ -92,8 +92,7 @@ unzip -d $DESTINATION_FOLDER/$VERSION $FILE
 	wget $UNINSTALL_BOT_SCRIPT
 )
 rm $FILE
-## exit to no longer be triplea user
-exit
+su root
 
 echo "install bot service scripts" | cowsay
 
