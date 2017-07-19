@@ -2,6 +2,32 @@
 - Documentationa and install scripts for lobby and bots
 
 
+## Lobby Install
+```
+rm -f setup_lobby; wget --no-cache https://raw.githubusercontent.com/triplea-game/lobby/master/setup_lobby; chmod +x setup_lobby
+./setup_lobby
+```
+
+## Lobby DB Setup
+
+### Install DB - steps from: https://help.ubuntu.com/community/PostgreSQL
+
+```
+sudo apt-get install postgresql postgresql-contrib
+sudo -u postgres psql postgres
+
+### Set password
+\password postgres
+
+### Set up DB
+export PGPASSWORD= $( grep password ../lobby.properties | sed 's/.*=//') 
+echo "create database ta_users" | psql -h localhost -U postgres
+
+wget https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/db/001_create_tables
+```
+
+# Bots
+
 ## Linux Bot install
 
 As root on a brand new linode machine (Ubuntu 16.04):
@@ -14,12 +40,6 @@ As root on a brand new linode machine (Ubuntu 16.04):
 ./setup_bot latest NJ_USA 70 4
 ./setup_bot latest CA_USA 80 4
 ./setup_bot latest TX_USA 90 4
-```
-
-## Lobby Install
-```
-rm -f setup_lobby; wget --no-cache https://raw.githubusercontent.com/triplea-game/lobby/master/setup_lobby; chmod +x setup_lobby
-./setup_lobby
 ```
 
 
@@ -55,25 +75,6 @@ cd /home/triplea/maps; ./download_all_maps
 ```
 
 
-
-## Lobby DB Setup
-
-
-### Install DB - steps from: https://help.ubuntu.com/community/PostgreSQL
-
-```
-sudo apt-get install postgresql postgresql-contrib
-sudo -u postgres psql postgres
-
-### Set password
-\password postgres
-
-### Set up DB
-export PGPASSWORD= $( grep password ../lobby.properties | sed 's/.*=//') 
-echo "create database ta_users" | psql -h localhost -U postgres
-
-wget https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/db/001_create_tables
-```
 
 ## Adding Linode servers
 
