@@ -12,6 +12,7 @@ Anyone who has the ability to host a game in the tripleA 1.9 Lobby can also host
 Insructions below assume you are root on a very brand new linode machine (Ubuntu 16.04):
 ```
 wget https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot
+chmod +x ./setup_bot
 ./setup_bot latest DE 40 5
 ```
 
