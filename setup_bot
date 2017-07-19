@@ -39,7 +39,7 @@ if [ -z "$BOT_COUNT" ]; then
 fi
 
 echo "create triplea user if does not exist"
-grep -q triplea /etc/passwd || adduser triplea && passwd -l triplea
+grep -q triplea /etc/passwd || adduser triplea && passwd triplea
 
 
 echo "Install system packages and dependencies"
