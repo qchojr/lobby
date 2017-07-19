@@ -5,6 +5,8 @@
 Anyone who has the ability to host a game in the tripleA 1.9 Lobby can also host one or more bot's in the lobby for others to use. Here is how.
 
 
+
+
 ## Linux Bot install
 
 Insructions below assume you are root on a very brand new linode machine (Ubuntu 16.04):
@@ -112,3 +114,21 @@ echo "create database ta_users" | psql -h localhost -U postgres
 
 wget https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/db/001_create_tables
 ```
+
+## Add a linode server
+
+Select 'add a linode' link:
+![add_a_linode](https://user-images.githubusercontent.com/12397753/28344982-f6602da0-6bdb-11e7-8b8b-ef7c7fa7cb8c.png)
+Choose the smallest one, we mainly need a running machine with RAM:
+![choose_cheap](https://user-images.githubusercontent.com/12397753/28344981-f65df044-6bdb-11e7-88e2-98914c388459.png)
+Choose deploy an image:
+![deploy_an_image](https://user-images.githubusercontent.com/12397753/28344978-f64d41b8-6bdb-11e7-9f80-9ca93bdab10a.png)
+Deploy ubuntu image, use defaults, set password, record it in the secret admin password registry:
+![deploy_ubuntu](https://user-images.githubusercontent.com/12397753/28344980-f65d685e-6bdb-11e7-8740-b47a26784a27.png)
+Rename the server instance:
+![rename_it](https://user-images.githubusercontent.com/12397753/28344979-f64e37f8-6bdb-11e7-8161-cdd0c1628a8e.png)
+Once it is imaged, boot it up:
+![boot_it_up](https://user-images.githubusercontent.com/12397753/28344977-f6491a34-6bdb-11e7-9b4e-e0545a9469fb.png)
+
+Now you can log in as root, and run the bot setup script. 
+TODO: set up the 'sudo' admin users
