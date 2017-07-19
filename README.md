@@ -27,7 +27,7 @@ export PGPASSWORD=abc
 echo "create database ta_users" | psql -h localhost -U postgres
 
 wget https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/db/001_create_tables
-cat 001_create_tables | psql -h localhost -U postgres
+cat 001_create_tables | psql -h localhost -U postgres ta_users
 ```
 
 # Bots
