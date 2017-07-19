@@ -147,4 +147,8 @@ TODO: set up the 'sudo' admin users
 
 ### Update host name
 - Edit `/etc/hostname`, put the hostname in the that file and save
+- Update `/etc/hosts`, add the hostname to the first line, like so:
+```
+127.0.0.1       localhost BotServer_NJ_70
+```
 - Restart the linode
