@@ -51,13 +51,13 @@ echo "create triplea user if does not exist" | cowsay
 grep -q triplea /etc/passwd || adduser triplea && passwd -l triplea
 
 
-if [[ "$BOT_VERSION" == "latest" ]]; then
+if [[ "$VERSION" == "latest" ]]; then
   # get latest version from github
-  BOT_VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' \
+  VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' \
 	| python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])")
 fi
 	
-echo "Install bot version: $BOT_VERSION" | cowsay
+echo "Install bot version: $VERSION" | cowsay
 
 HELP_FILE="/home/triplea/README.txt"
 
@@ -79,16 +79,16 @@ function nonRootInstall() {
 
 
 	FILE_SUFFIX="all_platforms.zip"
-	DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$BOT_VERSION/triplea-$BOT_VERSION-$FILE_SUFFIX"
+	DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$VERSION/triplea-$VERSION-$FILE_SUFFIX"
 	echo "Download from $DOWNLOAD_URL"
 	wget $DOWNLOAD_URL
 
-	FILE=$(ls | grep "$BOT_VERSION-$FILE_SUFFIX$")
-	mkdir -p $DESTINATION_FOLDER/$BOT_VERSION
+	FILE=$(ls | grep "$VERSION-$FILE_SUFFIX$")
+	mkdir -p $DESTINATION_FOLDER/$VERSION
 	
-        unzip -d $DESTINATION_FOLDER/$BOT_VERSION $FILE
+        unzip -d $DESTINATION_FOLDER/$VERSION $FILE
         (
-                cd $DESTINATION_FOLDER/$BOT_VERSION
+                cd $DESTINATION_FOLDER/$VERSION
                 wget $RUN_BOT_SCRIPT
                 wget $UNINSTALL_BOT_SCRIPT
         )
@@ -101,7 +101,7 @@ echo "install bot service scripts" | cowsay
 
 cd /lib/systemd/system/
 wget "$BOT_SERVICE_SCRIPT_URL"
-sed -i "s|BOT_DIR|$DESTINATION_FOLDER/$BOT_VERSION|" "./triplea-bot@.service"
+sed -i "s|BOT_DIR|$DESTINATION_FOLDER/$VERSION|" "./triplea-bot@.service"
 sed -i "s|BOT_NAME|$BOT_NAME|" "./triplea-bot@.service"
 systemctl daemon-reload
 
