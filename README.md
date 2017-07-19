@@ -99,7 +99,6 @@ Use defaults, set password, record it in the secret admin password registry:
 ![boot_it_up](https://user-images.githubusercontent.com/12397753/28344977-f6491a34-6bdb-11e7-9b4e-e0545a9469fb.png)
 
 Now you can log in as root, and run the bot setup script. 
-TODO: set up the 'sudo' admin users
 
 ### Update host name
 - Edit `/etc/hostname`, put the hostname in the that file and save
