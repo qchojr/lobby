@@ -1,7 +1,6 @@
 #!/bin/bash
 
 BOT_SERVICE_SCRIPT_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/triplea-bot%40.service"
-BOT_SERVICE_SCRIPT="triplea-bot@.service"
 DOWNLOAD_ALL_MAPS_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/download_all_maps"
 DOWNLOAD_ALL_MAPS_SCRIPT="download_all_maps"
                 
@@ -84,7 +83,7 @@ echo "install bot service scripts" | cowsay
 
 cd /lib/systemd/system/
 wget "$BOT_SERVICE_SCRIPT_URL"
-sed -i "s|BOT_DIR|$DESTINATION_FOLDER/$VERSION|" "./triplea-bot@.service"
+sed -i "s|BOT_DIR|/home/triplea/bots/$VERSION|" "./triplea-bot@.service"
 sed -i "s|BOT_NAME|$BOT_NAME|" "./triplea-bot@.service"
 systemctl daemon-reload
 
