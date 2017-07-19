@@ -62,6 +62,7 @@ echo "Install bot version: $VERSION" | cowsay
 HELP_FILE="/home/triplea/README.txt"
 
 function nonRootInstall() {
+        su triplea
 	## install bot maps
 
 	mkdir -p /home/triplea/maps
@@ -93,9 +94,11 @@ function nonRootInstall() {
                 wget $UNINSTALL_BOT_SCRIPT
         )
 	rm $FILE
+        ## exit to no longer be triplea user
+        exit
 }
 
-sudo -u triplea nonRootInstall
+nonRootInstall
 
 echo "install bot service scripts" | cowsay
 
