@@ -117,17 +117,24 @@ wget https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/
 
 ## Add a linode server
 
-Select 'add a linode' link:
+### Select 'add a linode' link:
 ![add_a_linode](https://user-images.githubusercontent.com/12397753/28345142-0ac9347a-6bdd-11e7-84cf-b46028362afa.png)
-Choose the smallest one, we mainly need a running machine with RAM:
+
+### Choose the smallest one
+We mainly need a running machine with RAM:
 ![choose_cheap](https://user-images.githubusercontent.com/12397753/28344981-f65df044-6bdb-11e7-88e2-98914c388459.png)
-Choose deploy an image:
+
+### Choose deploy an image
 ![deploy_an_image](https://user-images.githubusercontent.com/12397753/28344978-f64d41b8-6bdb-11e7-9f80-9ca93bdab10a.png)
-Deploy ubuntu image, use defaults, set password, record it in the secret admin password registry:
+
+### Deploy ubuntu image
+Use defaults, set password, record it in the secret admin password registry:
 ![deploy_ubuntu](https://user-images.githubusercontent.com/12397753/28344980-f65d685e-6bdb-11e7-8740-b47a26784a27.png)
-Rename the server instance:
+
+### Rename the server instance
 ![rename_it](https://user-images.githubusercontent.com/12397753/28344979-f64e37f8-6bdb-11e7-8161-cdd0c1628a8e.png)
-Once it is imaged, boot it up:
+
+### Once it is imaged, click boot button:
 ![boot_it_up](https://user-images.githubusercontent.com/12397753/28344977-f6491a34-6bdb-11e7-9b4e-e0545a9469fb.png)
 
 Now you can log in as root, and run the bot setup script. 
