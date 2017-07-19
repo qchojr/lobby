@@ -14,15 +14,20 @@ if [[ $* == *--help* ||  $* == *-h* ]]; then
 fi
 
 
+
 LOBBY_VERSION=${1:-'latest'}
 DESTINATION_FOLDER=${2:-'/home/triplea/lobby'}
 
 set -eu
 
+apt -y install openjdk-8-jre openjfx python3 curl unzip \
+   cowsay htop iftop tiptop fail2ban unattended-upgrades vim
+
+
 adduser triplea
 
 # Retrieve latest triplea version
-if [[ "$LOBBY_VERSION"== "latest" ]]; then
+if [[ "$LOBBY_VERSION" == "latest" ]]; then
   LOBBY_VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' | python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])")
 fi
 
