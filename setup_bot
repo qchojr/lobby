@@ -90,6 +90,9 @@ systemctl daemon-reload
 
 echo "open bot ports and drop start scripts in /home/triplea" | cowsay
 
+## make sure we allow ssh port
+ufw allow 22
+
 for i in $(seq 1 $BOT_COUNT); do
   BOT_NUMBER=$((START_NUMBER-1+i))
   BOT_PORT="40$BOT_NUMBER"
