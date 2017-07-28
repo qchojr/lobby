@@ -1,3 +1,28 @@
+# Bots
+
+## Linux Bot install
+
+As root on a brand new linode machine (Ubuntu 16.04):
+
+### One time setup
+```
+curl < <(https://raw.githubusercontent.com/triplea-game/lobby/master/install_triplea_user) 
+curl < <(https://raw.githubusercontent.com/triplea-game/lobby/master/install_maps) 
+```
+
+### Install bot Binaries
+```
+cd /home/root
+rm -f setup_bot; wget https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot; chmod +x setup_bot
+
+./setup_bot 3635 DE 40 4
+./setup_bot 3635 JP 50 4
+./setup_bot 3635 GA_USA 60 4
+./setup_bot 3635 NJ_USA 70 4
+./setup_bot 3635 CA_USA 80 4
+./setup_bot 3635 TX_USA 90 4
+```
+
 # lobby
 - Documentationa and install scripts for lobby and bots
 
@@ -29,33 +54,6 @@ echo "create database ta_users" | psql -h localhost -U postgres
 wget https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/db/001_create_tables
 cat 001_create_tables | psql -h localhost -U postgres ta_users
 ```
-
-# Bots
-
-## Linux Bot install
-
-As root on a brand new linode machine (Ubuntu 16.04):
-
-### One time setup
-```
-curl < <(https://raw.githubusercontent.com/triplea-game/lobby/master/install_triplea_user) 
-curl < <(https://raw.githubusercontent.com/triplea-game/lobby/master/install_maps) 
-```
-
-### Install bot Binaries
-```
-rm -f setup_bot; wget https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot; chmod +x setup_bot
-
-./setup_bot 3635 DE 40 4
-./setup_bot 3635 JP 50 4
-./setup_bot 3635 GA_USA 60 4
-./setup_bot 3635 NJ_USA 70 4
-./setup_bot 3635 CA_USA 80 4
-./setup_bot 3635 TX_USA 90 4
-```
-
-## Verify install
-Alongside setup_bot, there is a check_install script to help
 
 
 ## Running bots
