@@ -25,14 +25,31 @@ rm -f setup_bot; wget https://raw.githubusercontent.com/triplea-game/lobby/maste
 
 ## Check Install
 
-Check if bots are running:
+Check if service script has latest location:
+```
+cat /lib/systemd/system/triplea-bot@.service
+```
+
+Check binaries were installed:
+```
+ls /home/triplea/bots
+```
+
+## Start Bots
+
+Log in as triplea user, run:
+```
+/home/triplea/start_all
+```
+
+Can check if bot java processes are running:
 ```
 ps -ef | grep java
 ```
 
-Check if service script has latest location:
+Check service status (replace 'N' with bot number):
 ```
-cat /lib/systemd/system/triplea-bot@.service
+sudo service triplea-bot@N status
 ```
 
 
