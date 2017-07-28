@@ -15,13 +15,26 @@ curl < <(https://raw.githubusercontent.com/triplea-game/lobby/master/install_map
 cd /root
 rm -f setup_bot; wget https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot; chmod +x setup_bot
 
-./setup_bot 3635 DE 40 4
-./setup_bot 3635 JP 50 4
-./setup_bot 3635 GA_USA 60 4
-./setup_bot 3635 NJ_USA 70 4
-./setup_bot 3635 CA_USA 80 4
-./setup_bot 3635 TX_USA 90 4
+./setup_bot 1.9.0.0.3635 DE 40 4
+./setup_bot 1.9.0.0.3635 JP 50 4
+./setup_bot 1.9.0.0.3635 GA_USA 60 4
+./setup_bot 1.9.0.0.3635 NJ_USA 70 4
+./setup_bot 1.9.0.0.3635 CA_USA 80 4
+./setup_bot 1.9.0.0.3635 TX_USA 90 4
 ```
+
+## Check Install
+
+Check if bots are running:
+```
+ps -ef | grep java
+```
+
+Check if service script has latest location:
+```
+cat /lib/systemd/system/triplea-bot@.service
+```
+
 
 # lobby
 - Documentationa and install scripts for lobby and bots
