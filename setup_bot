@@ -73,15 +73,21 @@ chmod +x uninstall_bot
 
 echo "install bot service scripts" | cowsay
 
-cd /lib/systemd/system/
-rm -f "./triplea-bot@.service"
+
+SERVICE_SCRIPT="/lib/systemd/system/triplea-bot@.service"
+
+rm -f "triplea-bot@.service"
 wget "$BOT_SERVICE_SCRIPT_URL"
-sed -i "s|BOT_DIR|/home/triplea/bots/$VERSION|" "./triplea-bot@.service"
-sed -i "s|BOT_NAME|$BOT_NAME|" "./triplea-bot@.service"
+
+mv "triplea-bot@.service" "$SERVICE_SCRIPT"
+
+
+sed -i "s|BOT_DIR|/home/triplea/bots/$VERSION|" "$SERVICE_SCRIPT"
+sed -i "s|BOT_NAME|$BOT_NAME|" "$SERVICE_SCRIPT"
 systemctl daemon-reload
 
-grep -q "$VERSION" ./triplea-bot@.service" || echo "ERROR, $VERSION was not updated in /lib/systemd/system/triplea-bot@.service"
-grep -q "$VERSION" ./triplea-bot@.service" || exit 1
+grep -q "$VERSION" "$SERVICE_SCRIPT" || echo "ERROR, $VERSION was not updated in /lib/systemd/system/triplea-bot@.service"
+grep -q "$VERSION" "$SERVICE_SCRIPT" || exit 1
 
 
 
