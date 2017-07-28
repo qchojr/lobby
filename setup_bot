@@ -30,7 +30,7 @@ BOT_NAME=$2
 START_NUMBER=$3
 BOT_COUNT=$4
 
-set -eu
+set -eux
 
 if [ -z "$BOT_COUNT" ]; then
   usage
@@ -127,5 +127,5 @@ echo "y" | ufw enable
 
 
 chown -R triplea:triplea /home/triplea
-echo "Finished - Installed binaries for $VERSION"
+echo "Finished - Installed binaries for $VERSION, log back in as triplea user and run /home/triplea/start_all" | cowsay
 
