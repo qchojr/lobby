@@ -1,8 +1,6 @@
 #!/bin/bash
 
 BOT_SERVICE_SCRIPT_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/triplea-bot%40.service"
-DOWNLOAD_ALL_MAPS_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/download_all_maps"
-DOWNLOAD_ALL_MAPS_SCRIPT="download_all_maps"
                 
 RUN_BOT_SCRIPT="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/run_bot"
 UNINSTALL_BOT_SCRIPT="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/uninstall_bot"
@@ -15,7 +13,7 @@ fi
 
 function usage() {
   echo "$(basename $0) <version> <bot_name> <bot_start_number> <number_of_bots>"
-  echo " version: can be 'latest', otherwise something like '1.9.0.0.3521'"
+  echo " version: 'something like '1.9.0.0.3521'"
   echo " bot_name: name used for the bot, typically matches server region, eg: 'NJ_US'"
   echo " bot_start_number: bots are numbered, numbers should be unique, this is the start number for the bots \
          installed on this server"
@@ -48,12 +46,6 @@ apt-get update
 apt -y install openjdk-8-jre icedtea-8-plugin openjfx python3 curl unzip \
    cowsay htop iftop tiptop fail2ban unattended-upgrades vim
 
-
-if [[ "$VERSION" == "latest" ]]; then
-  # get latest version from github
-  VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' \
-	| python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])")
-fi
 	
 echo "Install bot version: $VERSION" | cowsay
 
@@ -83,6 +75,7 @@ chmod +x uninstall_bot
 echo "install bot service scripts" | cowsay
 
 cd /lib/systemd/system/
+rm -f "./triplea-bot@.service"
 wget "$BOT_SERVICE_SCRIPT_URL"
 sed -i "s|BOT_DIR|/home/triplea/bots/$VERSION|" "./triplea-bot@.service"
 sed -i "s|BOT_NAME|$BOT_NAME|" "./triplea-bot@.service"
@@ -123,16 +116,6 @@ chmod +x /home/triplea/start_all /home/triplea/stop_all
 echo "y" | ufw enable
 
 
-echo "installing bot maps" | cowsay
-
-mkdir -p /home/triplea/maps
-cd /home/triplea/maps
-wget $DOWNLOAD_ALL_MAPS_URL
-chmod +x $DOWNLOAD_ALL_MAPS_SCRIPT
-./$DOWNLOAD_ALL_MAPS_SCRIPT
-echo "maps can be updated by running 'cd /home/triplea/maps/; ./$DOWNLOAD_ALL_MAPS_SCRIPT'" > $HELP_FILE
-
-
 chown -R triplea:triplea /home/triplea
-echo "Finished - log back in as user 'triplea' and start those bots!" | cowsay
+echo "Finished - Installed binaries for $VERSION"
 

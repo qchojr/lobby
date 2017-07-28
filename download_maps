@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Installs the 'download_all_maps' script and runs it.
+
+DOWNLOAD_ALL_MAPS_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/download_all_maps"
+DOWNLOAD_ALL_MAPS_SCRIPT="download_all_maps"
+
+
+echo "installing bot maps" | cowsay
+
+mkdir -p /home/triplea/maps
+(
+  cd /home/triplea/maps
+  bash -s < <(curl $DOWNLOAD_ALL_MAPS_URL)
+)
+echo "maps can be updated by running 'cd /home/triplea/maps/; ./$DOWNLOAD_ALL_MAPS_SCRIPT'" \
+   | tee -a $HELP_FILE
+
+chown -R triplea:triplea /home/triplea
+echo "Finished, maps are in /home/triplea/maps" | cowsay
+
