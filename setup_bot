@@ -36,8 +36,6 @@ if [ -z "$BOT_COUNT" ]; then
   usage
 fi
 
-echo "create triplea user if does not exist"
-grep -q triplea /etc/passwd || adduser triplea && passwd triplea
 
 
 echo "Install system packages and dependencies"
@@ -65,6 +63,7 @@ FILE=$(ls | grep "$VERSION-$FILE_SUFFIX$")
 mkdir -p /home/triplea/bots/$VERSION
 
 unzip -d /home/triplea/bots/$VERSION $FILE
+rm *zip
 
 cd /home/triplea/bots/$VERSION
 wget $RUN_BOT_SCRIPT
@@ -80,6 +79,11 @@ wget "$BOT_SERVICE_SCRIPT_URL"
 sed -i "s|BOT_DIR|/home/triplea/bots/$VERSION|" "./triplea-bot@.service"
 sed -i "s|BOT_NAME|$BOT_NAME|" "./triplea-bot@.service"
 systemctl daemon-reload
+
+grep -q "$VERSION" ./triplea-bot@.service" || echo "ERROR, $VERSION was not updated in /lib/systemd/system/triplea-bot@.service"
+grep -q "$VERSION" ./triplea-bot@.service" || exit 1
+
+
 
 grep -q "^triplea" /etc/sudoers || echo "triplea ALL=(ALL) /usr/sbin/service triplea-bot@*" >> /etc/sudoers
 grep -q "^triplea.*htop" /etc/sudoers || echo "triplea ALL=(ALL) /usr/bin/htop*" >> /etc/sudoers
