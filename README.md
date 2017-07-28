@@ -12,7 +12,7 @@ curl < <(https://raw.githubusercontent.com/triplea-game/lobby/master/install_map
 
 ### Install bot Binaries
 ```
-cd /home/root
+cd /root
 rm -f setup_bot; wget https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot; chmod +x setup_bot
 
 ./setup_bot 3635 DE 40 4
