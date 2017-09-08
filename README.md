@@ -65,6 +65,10 @@ rm -f setup_lobby; wget --no-cache https://raw.githubusercontent.com/triplea-gam
 
 ## DB setup
 
+```
+sudo apt-get install postgresql
+```
+
 ### Set password
 ```
 sudo -u postgres psql postgres
