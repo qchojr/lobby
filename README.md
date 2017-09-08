@@ -60,7 +60,29 @@ sudo service triplea-bot@N status
 ## Lobby Install
 ```
 rm -f setup_lobby; wget --no-cache https://raw.githubusercontent.com/triplea-game/lobby/master/setup_lobby; chmod +x setup_lobby
-./setup_lobby
+./setup_lobby -h
+```
+
+Install command example:
+```
+sudo ./setup_lobby -h 1.9.0.0.6520 3304 /home/triplea/lobby
+```
+
+
+Update DB password
+```
+## look at the old password
+vi /home/triplea/lobby/1.9.0.0.5802/config/lobby/lobby.properties 
+## update the new one
+vi /home/triplea/lobby/1.9.0.0.6520/config/lobby/lobby.properties  
+```
+
+Log in to DB and look at tables
+```
+sudo -u postgres psql postgres
+\l
+\c ta_users
+\d
 ```
 
 ## DB setup
