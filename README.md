@@ -6,8 +6,8 @@ As root on a brand new linode machine (Ubuntu 16.04):
 
 ### One time setup
 ```
-curl < <(https://raw.githubusercontent.com/triplea-game/lobby/master/install_triplea_user) 
-curl < <(https://raw.githubusercontent.com/triplea-game/lobby/master/install_maps) 
+bash <(curl -s https://raw.githubusercontent.com/triplea-game/lobby/master/install_triplea_user) 
+bash <(curl -s https://raw.githubusercontent.com/triplea-game/lobby/master/install_maps) 
 ```
 
 ### Install bot Binaries
