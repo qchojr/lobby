@@ -24,5 +24,7 @@ fi
 mkdir -p logs
 
 cd $(dirname $0)
-java -server -Xmx320m -Djava.awt.headless=true -classpath bin/triplea.jar games.strategy.engine.framework.headlessGameServer.HeadlessGameServer triplea.game.host.console=false triplea.game= triplea.server=true triplea.port=$PORT triplea.lobby.host=$LOBBY_HOST triplea.lobby.port=$LOBBY_PORT triplea.name=${BOT_FULL_NAME} triplea.lobby.game.hostedBy=${BOT_FULL_NAME} triplea.lobby.game.supportEmail=Nobody@hotmail123.com triplea.lobby.game.comments="${COMMENT}" triplea.lobby.game.reconnection=172800 mapFolder=/home/triplea/maps
-
+java -server -Xmx320m -Djava.awt.headless=true -classpath bin/triplea.jar games.strategy.engine.framework.headlessGameServer.HeadlessGameServer \
+-Ptriplea.game.host.console=false -Ptriplea.game= -Ptriplea.server=true -Ptriplea.port=$PORT -Ptriplea.lobby.host=$LOBBY_HOST -Ptriplea.lobby.port=$LOBBY_PORT \
+-Ptriplea.name=${BOT_FULL_NAME} -Ptriplea.lobby.game.hostedBy=${BOT_FULL_NAME} -Ptriplea.lobby.game.supportEmail=Nobody@hotmail123.com \
+-Ptriplea.lobby.game.comments="${COMMENT}" -Ptriplea.lobby.game.reconnection=172800 -PmapFolder=/home/triplea/maps
