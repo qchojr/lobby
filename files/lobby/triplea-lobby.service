@@ -3,10 +3,9 @@ Description=TripleA Lobby Server
 Documentation=https://github.com/triplea-game/lobby/blob/master/README.md
 
 [Service]
-Environment="PORT=3304"
 WorkingDirectory=LOBBY_DIR
 User=triplea
-ExecStart=LOBBY_DIR/run_lobby $PORT
+ExecStart=LOBBY_DIR/run_lobby
 Restart=always
 
 [Install]
