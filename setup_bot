@@ -107,6 +107,7 @@ for i in $(seq 1 $BOT_COUNT); do
   BOT_NUMBER=$((START_NUMBER-1+i))
   BOT_PORT="40$BOT_NUMBER"
   ufw allow $BOT_PORT
+  systemctl enable triplea-bot@$BOT_NUMBER
 
   ## create bot start/stop scripts
   echo "Opened port $BOT_PORT for bot number $BOT_NUMBER"
@@ -116,10 +117,14 @@ for i in $(seq 1 $BOT_COUNT); do
   chmod +x /home/triplea/stop_bot* /home/triplea/start_bot* /home/triplea/restart_bot*
   echo "You can restart bot $BOT_NUMBER by running the comand '/home/triplea/restart_bot_$BOT_NUMBER'" > $HELP_FILE
   ## TODO: add a status script
+  
 
   echo "sudo service triplea-bot@$BOT_NUMBER start" >> /home/triplea/start_all
   echo "sudo service triplea-bot@$BOT_NUMBER stop" >> /home/triplea/stop_all
+  
 done
+
+systemctl daemon-reload
 
 chmod +x /home/triplea/start_all /home/triplea/stop_all
 
