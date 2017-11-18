@@ -21,8 +21,6 @@ if [[ -z "$PORT" || -z "$BOT_NUMBER" ]]; then
  exit -1
 fi
 
-mkdir -p logs
-
 cd $(dirname $0)
 java -server -Xmx320m -Djava.awt.headless=true -classpath bin/triplea.jar games.strategy.engine.framework.headlessGameServer.HeadlessGameServer \
 -Ptriplea.game.host.console=false -Ptriplea.game= -Ptriplea.server=true -Ptriplea.port=$PORT -Ptriplea.lobby.host=$LOBBY_HOST -Ptriplea.lobby.port=$LOBBY_PORT \
