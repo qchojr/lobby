@@ -4,8 +4,7 @@
 
 for i in $(curl --silent https://raw.githubusercontent.com/triplea-game/triplea/master/triplea_maps.yaml | grep url | sed 's/^-*\s*url: //' | grep "^https"); do
  MAP_NAME=$(echo $i | sed 's|/archive.*||' | sed 's|.*/||')
- wget $i
- mv -v master.zip $MAP_NAME-master.zip
+ wget -O $MAP_NAME-master.zip $i
 done;
 
 #TODO change this script to use the GitHub API, once we no longer use the triplea_maps.yaml file
