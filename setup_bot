@@ -40,7 +40,7 @@ fi
 
 echo "Install system packages and dependencies"
 
-apt-get update
+apt update
 apt -y install openjdk-8-jre icedtea-8-plugin openjfx python3 curl unzip \
    cowsay htop iftop tiptop fail2ban unattended-upgrades vim
 
