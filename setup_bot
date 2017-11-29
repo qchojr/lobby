@@ -122,8 +122,6 @@ for i in $(seq 1 $BOT_COUNT); do
   echo "sudo service triplea-bot@$BOT_NUMBER stop" >> /home/triplea/stop_all
 done
 
-systemctl daemon-reload
-
 chmod +x /home/triplea/start_all /home/triplea/stop_all
 
 echo "y" | ufw enable
