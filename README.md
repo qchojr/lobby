@@ -132,7 +132,7 @@ SET BOT_NUMBER=01
 SET LOBBY_HOST=45.79.144.53
 SET LOBBY_PORT=3304
 
-java -server -Xmx320m -Djava.awt.headless=true -classpath bin/triplea.jar games.strategy.engine.framework.headlessGameServer.HeadlessGameServer triplea.game.host.console=false triplea.game= triplea.server=true triplea.port=%PORT% triplea.lobby.host=%LOBBY_HOST% triplea.lobby.port=%LOBBY_PORT% triplea.name=Bot%BOT_NUMBER%_WarClub triplea.lobby.game.hostedBy=Bot%BOT_NUMBER%_WarClub triplea.lobby.game.supportEmail=youremail@hotmail.com triplea.lobby.game.comments="automated_host" triplea.lobby.game.reconnection=172800 mapFolder=../maps
+java -server -Xmx320m -Djava.awt.headless=true -classpath "bin/*" games.strategy.engine.framework.headlessGameServer.HeadlessGameServer -Ptriplea.game.host.console=false -Ptriplea.game= -Ptriplea.server=true -Ptriplea.port=%PORT% -Ptriplea.lobby.host=%LOBBY_HOST% -Ptriplea.lobby.port=%LOBBY_PORT% -Ptriplea.name=Bot%BOT_NUMBER%_WarClub -Ptriplea.lobby.game.hostedBy=Bot%BOT_NUMBER%_WarClub -Ptriplea.lobby.game.supportEmail=youremail@hotmail.com -Ptriplea.lobby.game.comments="automated_host" -Ptriplea.lobby.game.reconnection=172800 -PmapFolder=../maps
 
 pause
 ```
