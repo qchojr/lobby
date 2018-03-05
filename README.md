@@ -89,14 +89,15 @@ sudo -u postgres psql postgres
 ## DB setup
 
 ```
+sudo apt update
 sudo apt install postgresql
 ```
 
 ### Set password
+
 ```
 sudo -u postgres psql postgres
 \password postgres
-
 ```
 
 ### Set up DB
