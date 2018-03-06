@@ -3,8 +3,10 @@
 # Creates an empty lobby database for production.
 #
 
-read -p "Enter password for database user 'postgres': " -s db_password
+readonly db_user=postgres
+
+read -p "Enter password for database user '$db_user': " -s db_password
 echo
-PGPASSWORD="$db_password" psql -h localhost -U postgres <<EOF
+PGPASSWORD="$db_password" psql -h localhost -U $db_user <<EOF
   CREATE DATABASE ta_users;
 EOF
