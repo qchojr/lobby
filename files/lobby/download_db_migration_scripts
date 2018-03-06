@@ -1,0 +1,20 @@
+#!/bin/bash -e
+#
+# Downloads the latest revision of all database migration scripts to a folder.
+#
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: $0 <script_dir>"
+  echo
+  echo "  script_dir: The directory that receives the migration scripts.  Will"
+  echo "              be created if it doesn't exist."
+  exit 1
+fi
+
+readonly script_dir=$1
+
+mkdir -p $script_dir
+readonly git_repo_dir=$(mktemp -d)
+git clone --depth=1 https://github.com/triplea-game/triplea.git $git_repo_dir
+cp $git_repo_dir/config/lobby/db/* $script_dir
+rm -rf $git_repo_dir
