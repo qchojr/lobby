@@ -101,18 +101,24 @@ sudo -u postgres psql postgres
 ```
 
 ### Set up DB
+
+#### Create database
+
 ```
-## update postgres user password after a fresh install
-echo "alter user postgres with password 'abc';" | sudo -u postgres psql postgres
-
-## set magic env variable to remember the postgres user password and not be prompted
-export PGPASSWORD=abc
-echo "create database ta_users" | psql -h localhost -U postgres
-
-wget https://raw.githubusercontent.com/triplea-game/triplea/master/config/lobby/db/001_create_tables
-cat 001_create_tables | psql -h localhost -U postgres ta_users
+$ bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/create_db) ta_users
 ```
 
+**NOTE:** If you are setting up a staging server, replace `ta_users` with `ta_users_staging`.
+
+#### Initialize database schema
+
+```
+$ bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/download_db_migration_scripts) ./db_migration_scripts
+$ bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/migrate_db) ./db_migration_scripts 0 ta_users
+$ rm -rf ./db_migration_scripts
+```
+
+**NOTE:** If you are setting up a staging server, replace `ta_users` with `ta_users_staging`.
 
 ## Running bots
 Log in as triplea user, start/stop scripts are in `/home/triplea`
