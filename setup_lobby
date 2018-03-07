@@ -21,9 +21,9 @@ fi
 function usage() {
   echo "Usage: $(basename $0) [lobby_version] [port] [destination_folder]"
   echo "Example: $0 1.9.0.0.2668 3303 /home/triplea/lobby"
-  echo "Example: $0 latest 3304
-  echo "  port: port to run the lobby on
-  echo "  lobby_version: triplea-version of the lobby. Set to latest or leave blank to install the latest version"
+  echo "Example: $0 latest 3304"
+  echo "  lobby_version: TripleA version of the lobby. Set to latest or leave blank to install the latest version"
+  echo "  port: Port to run the lobby on. Defaults to 3304"
   echo "  destination_folder: Installation folder of the lobby. Defaults to /home/triplea/lobby"
   exit 1
 }
@@ -33,7 +33,7 @@ if [[ $* == *--help* ||  $* == *-h* ]]; then
 fi
 
 LOBBY_VERSION=${1:-'latest'}
-PORT=${2:-'3303'}
+PORT=${2:-'3304'}
 DESTINATION_FOLDER=${3:-'/home/triplea/lobby'}
 
 set -eux
@@ -62,11 +62,14 @@ fi
 DESTINATION_FOLDER=$DESTINATION_FOLDER/$LOBBY_VERSION
 mkdir -p $DESTINATION_FOLDER
 
+echo "$LOBBY_VERSION" > $DESTINATION_FOLDER/version
+
 DOWNLOAD_FILE="triplea-$LOBBY_VERSION-server.zip"
 DOWNLOAD_FILE_URL="https://github.com/triplea-game/triplea/releases/download/$LOBBY_VERSION/$DOWNLOAD_FILE"
 rm -f $DOWNLOAD_FILE
 wget $DOWNLOAD_FILE_URL
 unzip -o -d $DESTINATION_FOLDER $DOWNLOAD_FILE
+chmod go-rw $DESTINATION_FOLDER/config/lobby/lobby.properties
 rm $DOWNLOAD_FILE
 
 

@@ -54,31 +54,35 @@ sudo service triplea-bot@N status
 ```
 
 
-# lobby
-- Documentationa and install scripts for lobby and bots
+# Lobby
 
+- Documentation and install scripts for lobby and bots
 
 ## Lobby Install
+
 ```
 rm -f setup_lobby; wget --no-cache https://raw.githubusercontent.com/triplea-game/lobby/master/setup_lobby; chmod +x setup_lobby
-./setup_lobby -h
+sudo ./setup_lobby -h
 ```
 
 Install command example:
+
 ```
-sudo ./setup_lobby -h 1.9.0.0.6520 3304 /home/triplea/lobby
+sudo ./setup_lobby 1.9.0.0.6520 3304 /home/triplea/lobby
 ```
 
+Update properties:
 
-Update DB password
 ```
-## look at the old password
-vi /home/triplea/lobby/1.9.0.0.5802/config/lobby/lobby.properties 
-## update the new one
-vi /home/triplea/lobby/1.9.0.0.6520/config/lobby/lobby.properties  
+sudo -u triplea vim /home/triplea/lobby/1.9.0.0.6520/config/lobby/lobby.properties
 ```
 
-Log in to DB and look at tables
+Change the value of the `postgres_password` property to the correct password for this server (refer to the Master Secrets document).
+
+**NOTE:** If you are setting up a staging server, change the value of the `postgres_database` property to `ta_users_staging`.
+
+Log in to DB and look at tables:
+
 ```
 sudo -u postgres psql postgres
 \l
@@ -86,7 +90,13 @@ sudo -u postgres psql postgres
 \d
 ```
 
-## DB setup
+## Lobby uninstall
+
+```
+$ sudo /home/triplea/lobby/1.9.0.0.6520/uninstall_lobby
+```
+
+## Lobby DB setup
 
 ```
 sudo apt update
