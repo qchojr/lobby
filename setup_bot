@@ -1,9 +1,10 @@
 #!/bin/bash
 
 BOT_SERVICE_SCRIPT_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/triplea-bot%40.service"
-                
 RUN_BOT_SCRIPT="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/run_bot"
 UNINSTALL_BOT_SCRIPT="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/uninstall_bot"
+
+COWSAY=/usr/games/cowsay
 
 if [[ $USER != "root" ]]; then
   echo "This script must be run as root"
@@ -12,13 +13,14 @@ if [[ $USER != "root" ]]; then
 fi
 
 function usage() {
-  echo "$(basename $0) <version> <bot_name> <bot_start_number> <number_of_bots>"
-  echo " version: 'something like '1.9.0.0.3521'"
+  echo "$(basename $0) <version> <bot_name> <bot_start_number> <number_of_bots> [lobby_host] [lobby_port]"
+  echo " version: something like '1.9.0.0.3521'"
   echo " bot_name: name used for the bot, typically matches server region, eg: 'NJ_US'"
-  echo " bot_start_number: bots are numbered, numbers should be unique, this is the start number for the bots \
-         installed on this server"
+  echo " bot_start_number: bots are numbered, numbers should be unique, this is the start number for the bots installed on this server"
   echo " number_of_bots: how many bot instances are to be installed/running on this server."
-  echo ""
+  echo " lobby_host: lobby host to which the bots will connect (default: lobby.triplea-game.org)."
+  echo " lobby_port: lobby port to which the bots will connect (default: 3304)."
+  echo
   echo "Notes:"
   echo " - files are installed to /home/triplea/bots/<version>"
   echo " - bot maps are installed to /home/triplea/maps"
@@ -29,25 +31,24 @@ VERSION=$1
 BOT_NAME=$2
 START_NUMBER=$3
 BOT_COUNT=$4
-
-set -eux
+LOBBY_HOST=${5:-'lobby.triplea-game.org'}
+LOBBY_PORT=${6:-'3304'}
 
 if [ -z "$BOT_COUNT" ]; then
   usage
 fi
 
-
+set -eux
 
 echo "Install system packages and dependencies"
 
 apt update
 apt -y install openjdk-8-jre icedtea-8-plugin openjfx python3 curl unzip \
-   cowsay htop iftop tiptop fail2ban unattended-upgrades vim
+    cowsay htop iftop tiptop fail2ban unattended-upgrades vim
 
-	
-echo "Install bot version: $VERSION" | cowsay
+echo "Install bot version: $VERSION" | $COWSAY
 
-HELP_FILE="/home/triplea/README.txt"
+HELP_FILE="/home/triplea/BOT-README.txt"
 
 ## install bot java executable
 
@@ -66,13 +67,13 @@ unzip -d /home/triplea/bots/$VERSION $FILE
 rm *zip
 
 cd /home/triplea/bots/$VERSION
+echo "$VERSION" > version
 wget $RUN_BOT_SCRIPT
 chmod +x run_bot
 wget $UNINSTALL_BOT_SCRIPT
 chmod +x uninstall_bot
 
-echo "install bot service scripts" | cowsay
-
+echo "install bot service scripts" | $COWSAY
 
 SERVICE_SCRIPT="/lib/systemd/system/triplea-bot@.service"
 
@@ -81,22 +82,20 @@ wget "$BOT_SERVICE_SCRIPT_URL"
 
 mv "triplea-bot@.service" "$SERVICE_SCRIPT"
 
-
 sed -i "s|BOT_DIR|/home/triplea/bots/$VERSION|" "$SERVICE_SCRIPT"
 sed -i "s|BOT_NAME|$BOT_NAME|" "$SERVICE_SCRIPT"
+sed -i "s|LOBBY_HOST|$LOBBY_HOST|" "$SERVICE_SCRIPT"
+sed -i "s|LOBBY_PORT|$LOBBY_PORT|" "$SERVICE_SCRIPT"
 systemctl daemon-reload
 
 grep -q "$VERSION" "$SERVICE_SCRIPT" || echo "ERROR, $VERSION was not updated in /lib/systemd/system/triplea-bot@.service"
 grep -q "$VERSION" "$SERVICE_SCRIPT" || exit 1
 
-
-
 grep -q "^triplea" /etc/sudoers || echo "triplea ALL=(ALL) /usr/sbin/service triplea-bot@*" >> /etc/sudoers
 grep -q "^triplea.*htop" /etc/sudoers || echo "triplea ALL=(ALL) /usr/bin/htop*" >> /etc/sudoers
 grep -q "^triplea.*iftop" /etc/sudoers || echo "triplea ALL=(ALL) /usr/bin/iftop" >> /etc/sudoers
 
-
-echo "open bot ports and drop start scripts in /home/triplea" | cowsay
+echo "open bot ports and drop start scripts in /home/triplea" | $COWSAY
 
 ## make sure we allow ssh port
 ufw allow 22
@@ -126,7 +125,5 @@ chmod +x /home/triplea/start_all /home/triplea/stop_all
 
 echo "y" | ufw enable
 
-
 chown -R triplea:triplea /home/triplea
-echo "Finished - Installed binaries for $VERSION, log back in as triplea user and run /home/triplea/start_all" | cowsay
-
+echo "Finished - Installed binaries for $VERSION, log back in as triplea user and run /home/triplea/start_all" | $COWSAY

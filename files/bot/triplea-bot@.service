@@ -6,7 +6,7 @@ Documentation=https://github.com/triplea-game/lobby/blob/master/README.md
 Environment=
 WorkingDirectory=BOT_DIR
 User=triplea
-ExecStart=BOT_DIR/run_bot 40%i %i BOT_NAME
+ExecStart=BOT_DIR/run_bot 40%i %i BOT_NAME LOBBY_HOST LOBBY_PORT
 Restart=always
 
 [Install]
