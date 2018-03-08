@@ -7,7 +7,7 @@ PORT=$1
 ## the id and name of the bot server.
 BOT_NUMBER=$2
 BOT_NAME=$3
-LOBBY_HOST=${4:-'45.79.144.53'}
+LOBBY_HOST=${4:-'lobby.triplea-game.org'}
 LOBBY_PORT=${5:-'3304'}
 
 set -eu
@@ -16,9 +16,9 @@ BOT_FULL_NAME="Bot${BOT_NUMBER}_${BOT_NAME}" ## must start with "Bot"
 COMMENT="automated_host ${BOT_NUMBER}" ## must contain "automated_host"
 
 
-if [[ -z "$PORT" || -z "$BOT_NUMBER" ]]; then
- echo "Usage: $(basename $0) bot_port bot_number [lobby_host] [lobby_port]"
- exit -1
+if [[ -z "$PORT" || -z "$BOT_NUMBER" || -z "$BOT_NAME" ]]; then
+ echo "Usage: $(basename $0) bot_port bot_number bot_name [lobby_host] [lobby_port]"
+ exit 1
 fi
 
 cd $(dirname $0)
