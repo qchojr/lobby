@@ -1,10 +1,7 @@
 #!/bin/bash
 
-BOT_SERVICE_SCRIPT_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/triplea-bot%40.service"
-RUN_BOT_SCRIPT="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/run_bot"
-UNINSTALL_BOT_SCRIPT="https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/uninstall_bot"
-
 COWSAY=/usr/games/cowsay
+CURL="curl -L"
 
 if [[ $USER != "root" ]]; then
   echo "This script must be run as root"
@@ -48,39 +45,30 @@ apt -y install openjdk-8-jre icedtea-8-plugin openjfx python3 curl unzip \
 
 echo "Install bot version: $VERSION" | $COWSAY
 
-HELP_FILE="/home/triplea/BOT-README.txt"
-
 ## install bot java executable
 
 mkdir -p /home/triplea/bots
 cd /home/triplea/bots
 
-FILE_SUFFIX="all_platforms.zip"
-DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$VERSION/triplea-$VERSION-$FILE_SUFFIX"
+DOWNLOAD_URL="https://github.com/triplea-game/triplea/releases/download/$VERSION/triplea-$VERSION-all_platforms.zip"
 echo "Download from $DOWNLOAD_URL"
-wget $DOWNLOAD_URL
-
-FILE=$(ls | grep "$VERSION-$FILE_SUFFIX$")
+BOT_INSTALLER_FILE="triplea-$VERSION.zip"
+$CURL "$DOWNLOAD_URL" > $BOT_INSTALLER_FILE
 mkdir -p /home/triplea/bots/$VERSION
-
-unzip -d /home/triplea/bots/$VERSION $FILE
-rm *zip
+unzip -d /home/triplea/bots/$VERSION $BOT_INSTALLER_FILE
+rm $BOT_INSTALLER_FILE
 
 cd /home/triplea/bots/$VERSION
 echo "$VERSION" > version
-wget $RUN_BOT_SCRIPT
+$CURL "https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/run_bot" > run_bot
 chmod +x run_bot
-wget $UNINSTALL_BOT_SCRIPT
+$CURL "https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/uninstall_bot" > uninstall_bot
 chmod +x uninstall_bot
 
 echo "install bot service scripts" | $COWSAY
 
 SERVICE_SCRIPT="/lib/systemd/system/triplea-bot@.service"
-
-rm -f "triplea-bot@.service"
-wget "$BOT_SERVICE_SCRIPT_URL"
-
-mv "triplea-bot@.service" "$SERVICE_SCRIPT"
+$CURL "https://raw.githubusercontent.com/triplea-game/lobby/master/files/bot/triplea-bot%40.service" > "$SERVICE_SCRIPT"
 
 sed -i "s|BOT_DIR|/home/triplea/bots/$VERSION|" "$SERVICE_SCRIPT"
 sed -i "s|BOT_NAME|$BOT_NAME|" "$SERVICE_SCRIPT"
@@ -88,7 +76,7 @@ sed -i "s|LOBBY_HOST|$LOBBY_HOST|" "$SERVICE_SCRIPT"
 sed -i "s|LOBBY_PORT|$LOBBY_PORT|" "$SERVICE_SCRIPT"
 systemctl daemon-reload
 
-grep -q "$VERSION" "$SERVICE_SCRIPT" || echo "ERROR, $VERSION was not updated in /lib/systemd/system/triplea-bot@.service"
+grep -q "$VERSION" "$SERVICE_SCRIPT" || echo "ERROR, $VERSION was not updated in $SERVICE_SCRIPT"
 grep -q "$VERSION" "$SERVICE_SCRIPT" || exit 1
 
 grep -q "^triplea" /etc/sudoers || echo "triplea ALL=(ALL) /usr/sbin/service triplea-bot@*" >> /etc/sudoers
@@ -114,7 +102,7 @@ for i in $(seq 1 $BOT_COUNT); do
   echo "sudo service triplea-bot@$BOT_NUMBER restart" > /home/triplea/restart_bot_$BOT_NUMBER
   echo "sudo service triplea-bot@$BOT_NUMBER stop" > /home/triplea/stop_bot_$BOT_NUMBER
   chmod +x /home/triplea/stop_bot* /home/triplea/start_bot* /home/triplea/restart_bot*
-  echo "You can restart bot $BOT_NUMBER by running the comand '/home/triplea/restart_bot_$BOT_NUMBER'" > $HELP_FILE
+  echo "You can restart bot $BOT_NUMBER by running the comand '/home/triplea/restart_bot_$BOT_NUMBER'" > /home/triplea/BOT-README.txt
   ## TODO: add a status script
 
   echo "sudo service triplea-bot@$BOT_NUMBER start" >> /home/triplea/start_all

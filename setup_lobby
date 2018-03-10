@@ -1,16 +1,16 @@
 #!/bin/bash
 
+CURL="curl -L"
+
 UNINSTALL_LOBBY="uninstall_lobby"
 UNINSTALL_LOBBY_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/$UNINSTALL_LOBBY"
 
 RUN_LOBBY="run_lobby"
 RUN_LOBBY_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/run_lobby"
 
-
 SERVICE_FILE="triplea-lobby.service"
 SERVICE_FILE_URL="https://raw.githubusercontent.com/triplea-game/lobby/master/files/lobby/triplea-lobby.service" 
 SERVICE_FILE_PATH="/lib/systemd/system/$SERVICE_FILE"
-
 
 if [[ $USER != "root" ]]; then
   echo "This script must be run as root"
@@ -38,13 +38,11 @@ DESTINATION_FOLDER=${3:-'/home/triplea/lobby'}
 
 set -eux
 
-
 grep -q triplea /etc/passwd || adduser triplea
 
 grep -q "^triplea" /etc/sudoers || echo "triplea ALL=(ALL) /usr/sbin/service triplea-lobby" >> /etc/sudoers
 grep -q "^triplea.*htop" /etc/sudoers || echo "triplea ALL=(ALL) /usr/bin/htop*" >> /etc/sudoers
 grep -q "^triplea.*iftop" /etc/sudoers || echo "triplea ALL=(ALL) /usr/bin/iftop" >> /etc/sudoers
-
 
 apt -y install openjdk-8-jre openjfx python3 curl unzip postgresql postgresql-contrib \
    cowsay htop iftop tiptop fail2ban unattended-upgrades vim
@@ -55,7 +53,7 @@ echo "y" | ufw enable
 
 # Retrieve latest triplea version
 if [[ "$LOBBY_VERSION" == "latest" ]]; then
-  LOBBY_VERSION=$(curl -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' \
+  LOBBY_VERSION=$($CURL -s 'https://api.github.com/repos/triplea-game/triplea/releases/latest' \
         | python3 -c "import sys, json; print(json.load(sys.stdin)['tag_name'])")
 fi
 
@@ -64,28 +62,23 @@ mkdir -p $DESTINATION_FOLDER
 
 echo "$LOBBY_VERSION" > $DESTINATION_FOLDER/version
 
-DOWNLOAD_FILE="triplea-$LOBBY_VERSION-server.zip"
-DOWNLOAD_FILE_URL="https://github.com/triplea-game/triplea/releases/download/$LOBBY_VERSION/$DOWNLOAD_FILE"
-rm -f $DOWNLOAD_FILE
-wget $DOWNLOAD_FILE_URL
-unzip -o -d $DESTINATION_FOLDER $DOWNLOAD_FILE
+LOBBY_INSTALLER_FILE="triplea-$LOBBY_VERSION.zip"
+$CURL "https://github.com/triplea-game/triplea/releases/download/$LOBBY_VERSION/triplea-$LOBBY_VERSION-server.zip" > $LOBBY_INSTALLER_FILE
+unzip -o -d $DESTINATION_FOLDER $LOBBY_INSTALLER_FILE
+rm $LOBBY_INSTALLER_FILE
 chmod go-rw $DESTINATION_FOLDER/config/lobby/lobby.properties
-rm $DOWNLOAD_FILE
 
-
-curl $RUN_LOBBY_URL > $DESTINATION_FOLDER/$RUN_LOBBY
-curl $UNINSTALL_LOBBY_URL > $DESTINATION_FOLDER/$UNINSTALL_LOBBY
+$CURL $RUN_LOBBY_URL > $DESTINATION_FOLDER/$RUN_LOBBY
+$CURL $UNINSTALL_LOBBY_URL > $DESTINATION_FOLDER/$UNINSTALL_LOBBY
 chmod +x $DESTINATION_FOLDER/$RUN_LOBBY $DESTINATION_FOLDER/$UNINSTALL_LOBBY
 
-
-curl $SERVICE_FILE_URL > $SERVICE_FILE_PATH
+$CURL $SERVICE_FILE_URL > $SERVICE_FILE_PATH
 sed -i "s|LOBBY_DIR|$DESTINATION_FOLDER|" $SERVICE_FILE_PATH
 
 systemctl enable triplea-lobby
 systemctl daemon-reload
 
 chown -R triplea:triplea /home/triplea
-
 
 echo "Make sure to update the DB password in: $DESTINATION_FOLDER/config/lobby/lobby.properties"
 
