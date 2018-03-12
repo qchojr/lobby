@@ -11,17 +11,15 @@ bash <(curl -s https://raw.githubusercontent.com/triplea-game/lobby/master/insta
 ```
 
 ### Install bot Binaries
+Example usage (must be run as `root`):
 ```
-cd /root
-rm -f setup_bot; wget https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot; chmod +x setup_bot
-
-./setup_bot 1.9.0.0.7534 SG 30 4
-./setup_bot 1.9.0.0.7534 DE 40 4
-./setup_bot 1.9.0.0.7534 JP 50 4
-./setup_bot 1.9.0.0.7534 GA_USA 60 4
-./setup_bot 1.9.0.0.7534 NJ_USA 70 4
-./setup_bot 1.9.0.0.7534 CA_USA 80 4
-./setup_bot 1.9.0.0.7534 TX_USA 90 4
+bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot) 1.9.0.0.7534 SG 30 4
+bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot) 1.9.0.0.7534 DE 40 4
+bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot) 1.9.0.0.7534 JP 50 4
+bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot) 1.9.0.0.7534 GA_USA 60 4
+bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot) 1.9.0.0.7534 NJ_USA 70 4
+bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot) 1.9.0.0.7534 CA_USA 80 4
+bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/setup_bot) 1.9.0.0.7534 TX_USA 90 4
 ```
 
 ## Check Install
@@ -60,15 +58,11 @@ sudo service triplea-bot@N status
 
 ## Lobby Install
 
-```
-rm -f setup_lobby; wget --no-cache https://raw.githubusercontent.com/triplea-game/lobby/master/setup_lobby; chmod +x setup_lobby
-sudo ./setup_lobby -h
-```
-
-Install command example:
+Example usage (must be run as `root`):
 
 ```
-sudo ./setup_lobby 1.9.0.0.6520 3304 /home/triplea/lobby
+bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/setup_lobby) -h
+bash <(curl https://raw.githubusercontent.com/triplea-game/lobby/master/setup_lobby) 1.9.0.0.6520 3304 /home/triplea/lobby
 ```
 
 Update properties:
