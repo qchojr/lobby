@@ -1,3 +1,6 @@
+# DEPRECATION NOTICE
+this repo is deprecated, only here for reference, please instead see: https://github.com/triplea-game/infrastructure
+
 # Bots
 
 ## Linux Bot install
